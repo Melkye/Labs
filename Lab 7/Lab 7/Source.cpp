@@ -19,9 +19,10 @@ int main()
 	system("pause");
 }
 
-double *array_generator(int length)					// генерує масив заданої довжини з елементами з проміжку [-10; 10]
+double* array_generator(int length)					// генерує масив заданої довжини з
+													// елементами з проміжку [-10; 10]
 {
-	double *array = new double[length];
+	double* array = new double[length];
 	srand(time(NULL));
 	for (int i = 0; i < length; i++)
 		array[i] = (double(rand() % 2001) - 1000) / 100.;
