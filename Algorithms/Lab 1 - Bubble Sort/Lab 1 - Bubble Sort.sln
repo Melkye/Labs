@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30517.126
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Lab 1 - Bubble Sort", "Lab 1 - Bubble Sort\Lab 1 - Bubble Sort.pyproj", "{E32E5A15-9EF3-4FBB-B991-8D122F4DE80F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E32E5A15-9EF3-4FBB-B991-8D122F4DE80F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E32E5A15-9EF3-4FBB-B991-8D122F4DE80F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9FDE392D-11A7-4C32-AFD4-3AA38C49E933}
+	EndGlobalSection
+EndGlobal
