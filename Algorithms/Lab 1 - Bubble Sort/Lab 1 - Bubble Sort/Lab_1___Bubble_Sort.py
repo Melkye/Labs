@@ -1,9 +1,9 @@
 import random
 
 def list_generator(n):
-    array = []
-    for i in range(n):
-        array.append(random.randrange(1, 99))
+    array = [ i+1 for i in range(n)]
+   # for i in range(n):
+    #    array.append(random.randrange(1, 99))
     return array
 
 def bubble_sort(array):

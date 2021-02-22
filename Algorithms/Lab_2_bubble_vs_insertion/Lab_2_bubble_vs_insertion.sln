@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30517.126
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Lab_2_bubble_vs_insertion", "Lab_2_bubble_vs_insertion\Lab_2_bubble_vs_insertion.pyproj", "{A0169FCA-C455-4F89-9450-8C3B2CA8A4DF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A0169FCA-C455-4F89-9450-8C3B2CA8A4DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0169FCA-C455-4F89-9450-8C3B2CA8A4DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {185A6C11-4C02-4E64-A566-E3E87A98FC3E}
+	EndGlobalSection
+EndGlobal
