@@ -4,7 +4,7 @@ namespace Lab2_SLE1
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             double[,] matrix1 = { {3.81, 0.25, 1.28, 1.25},
                                  {2.25, 1.32, 5.08, 0.49},
@@ -15,6 +15,8 @@ namespace Lab2_SLE1
             Console.WriteLine(" Input System:");
             system1.PrintSystem();
             system1.GaussianMethod();
+            //Console.WriteLine("{0, 10}", matrix1[0, 0]);
+            system1.evalResidual();
             system1.PrintSolution();
             Console.ReadKey();
         }
@@ -22,19 +24,26 @@ namespace Lab2_SLE1
     public class SoLE
     {
        public SoLE(double[,] matrix, double[] vector)
-        {
-            this.inputMatrix = matrix;
-            this.inputVector = vector;
+       {
+            int order = matrix.GetLength(1);
+
+            this.inputMatrix = new double[order, order];
+            this.inputVector = new double[order];
             this.matrix = matrix;
             this.vector = vector;
-            this.x = new double[matrix.GetLength(1)];
-            this.residual = new double[matrix.GetLength(1)];
-            for (int i = 0; i < matrix.GetLength(1); i++)
+            this.x = new double[order];
+            this.residual = new double[order];
+            for (int i = 0; i < order; i++)
             {
                 x[i] = 0;
                 residual[i] = 0;
+                this.inputVector[i] = vector[i];
+                for (int j =0; j < order; j++)
+                {
+                    this.inputMatrix[i, j] = matrix[i, j];
+                }
             }
-        }
+       }
         private double[,] inputMatrix;
         private double[,] matrix;
         private double[] inputVector;
@@ -69,7 +78,7 @@ namespace Lab2_SLE1
             Console.WriteLine(" The Residual Vector:");
             for (int i = 0; i < order; i++)
             {
-                Console.Write("{0, 10:f6}", residual[i]);
+                Console.WriteLine("{0, 25}", residual[i]);
             }
             Console.WriteLine();
         }
@@ -110,14 +119,18 @@ namespace Lab2_SLE1
             }
             Console.WriteLine(" The Final System:");
             PrintSystem();
+        }
 
+        public void evalResidual()
+        {
+            int order = matrix.GetLength(1);
             for (int i = 0; i < order; i++)
             {
+                residual[i] += inputVector[i]; 
                 for (int j = 0; j < order; j++)
                 {
-                    residual[i] += inputMatrix[j, i] * x[j];
+                    residual[i] -= inputMatrix[i, j] * x[j];
                 }
-                residual[i] -= inputVector[i]; 
             }
         }
     }
