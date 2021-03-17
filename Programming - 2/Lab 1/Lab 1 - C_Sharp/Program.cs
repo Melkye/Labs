@@ -6,7 +6,7 @@ namespace Lab_1___C_Sharp
     {
         static void Main()
         {
-            int number = -37;
+            int number = 0;
             DecreaseByOne(ref number);
             bool areEqual = Equality(-8, 125);
         }

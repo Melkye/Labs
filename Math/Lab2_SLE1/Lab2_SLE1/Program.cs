@@ -6,16 +6,21 @@ namespace Lab2_SLE1
     {
         static void Main()
         {
-            double[,] matrix1 = { {3.81, 0.25, 1.28, 1.25},
-                                 {2.25, 1.32, 5.08, 0.49},
-                                 {5.31, 6.78, 0.98, 1.04},
-                                 {9.89, 2.45, 3.35, 2.28} };
-            double[] vector1 = { 4.21, 6.97, 2.38, 10.98 };
+            //double[,] matrix1 = { {3.81, 0.25, 1.28, 1.25},
+            //                     {2.25, 1.32, 5.08, 0.49},
+            //                     {5.31, 6.78, 0.98, 1.04},
+            //                     {9.89, 2.45, 3.35, 2.28} };
+            double[,] matrix1 = { {5.43, 1.12, 0.95, 1.32, 0.83},
+                                 {1.12, 4.03, 2.12, 0.57, 0.91},
+                                 {0.95, 2.12, 6.38, 1.29, 1.57},
+                                 {1.32, 0.57, 1.29, 2.32, 1.25},
+                                 {0.83, 0.91, 1.57, 1.25, 5.21} };
+            //double[] vector1 = { 4.21, 6.97, 2.38, 10.98 };
+            double[] vector1 = { 6.54, 3.21, 3.93, 6.25, 5.3 };
             SoLE system1 = new SoLE(matrix1, vector1);
             Console.WriteLine(" Input System:");
             system1.PrintSystem();
             system1.GaussianMethod();
-            //Console.WriteLine("{0, 10}", matrix1[0, 0]);
             system1.evalResidual();
             system1.PrintSolution();
             Console.ReadKey();
