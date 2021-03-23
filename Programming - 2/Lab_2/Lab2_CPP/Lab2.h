@@ -5,4 +5,4 @@
 
 char* EnterCharArray();
 CustomString* EnterStringArray(int& nRows);
-void PrintText(Text text);
+//void PrintText(Text text);

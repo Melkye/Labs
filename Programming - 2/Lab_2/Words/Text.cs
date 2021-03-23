@@ -10,7 +10,7 @@ namespace Words
 		//	_content = null;//??
 		//}
 
-		public Text(in CustomString[] array)
+		public Text(CustomString[] array)
 		{
 			SetContent(array);
 		}
@@ -59,8 +59,6 @@ namespace Words
 
         public void DeleteRow(CustomString searchedSubstring)  // deletes all rows containing a specified substring
         {
-            //int nRowToDelete = 0;
-            //bool isSubstringFound = false;
             char[] substring = searchedSubstring.GetString();
             for (int i = 0; i < _size; i++)
             {
@@ -81,11 +79,6 @@ namespace Words
                     }
                 }
             }
-
-            //if (isSubstringFound)
-            //{
-            //    DeleteRow(nRowToDelete);
-            //}
         }
 
         public int LongestRow()
@@ -106,7 +99,7 @@ namespace Words
             {
                 int tempStringSize = _content[i].GetLength();
                 char[] tempString = _content[i].GetString();
-                for (int j = 0; j < _content[i].GetLength(); j++)
+                for (int j = 0; j < tempStringSize; j++)
                 {
                     char checkChar = _content[i].GetString()[j];
                     if (char.IsLower(checkChar) && (j == 0 || _content[i].GetString()[j - 1] == ' '))
@@ -123,6 +116,7 @@ namespace Words
             {
                 _content[i].Clear();
             }
+            _size = 0;
         }
 
         private CustomString[] _content;

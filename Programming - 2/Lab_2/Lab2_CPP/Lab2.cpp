@@ -21,6 +21,8 @@ int main() {
 	firstText.DeleteRow(substringToDelete);
 	//PrintText(firstText);
 
+	int longestRow = firstText.LongestRow();
+	firstText.Clear();
 	return 0;
 }
 

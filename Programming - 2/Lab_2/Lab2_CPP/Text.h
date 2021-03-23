@@ -12,7 +12,7 @@ public:
 	int GetSize();
 	void AddRow(CustomString newRow);
 	void DeleteRow(int rowIndex);
-	void DeleteRow(CustomString searchedString); //to deletes every row containing a specified substring
+	void DeleteRow(CustomString searchedString); //deletes every row containing a specified substring
 	int LongestRow();
 	void SetUppercase();
 	void Clear();

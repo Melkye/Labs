@@ -35,7 +35,9 @@ namespace Words
 		public void Clear()
         {
 			_string = null;
+			_length = 0;
         }
+		
 
 		private char[] _string;
 		private int _length;

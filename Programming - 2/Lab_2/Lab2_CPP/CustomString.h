@@ -6,7 +6,6 @@ class CustomString
 {
 public:
 	CustomString();
-	//CustomString(bool inputFromConsole);
 	CustomString(char* charArray);
 	~CustomString();
 
@@ -15,7 +14,7 @@ public:
 	void Clear();
 
 private:
-	char* _string; // square brackets??
+	char* _string;
 	int _length;
 
 };

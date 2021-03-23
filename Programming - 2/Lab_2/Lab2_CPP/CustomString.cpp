@@ -41,5 +41,6 @@
 
 	void CustomString::Clear()
 	{
-		_string = nullptr;
+		delete[] _string;
+		_length = 0;
 	}

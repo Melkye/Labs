@@ -51,21 +51,21 @@ void Text::AddRow(CustomString newRow) {
 	tempText[_size - 1] = newRow;
 	CustomString* forDeletion = _content;
 	_content = tempText;
-	delete[] forDeletion;
+	//delete forDeletion; // delete[] forDeletion;?
 	tempText = nullptr;
 }
 
 void Text::DeleteRow(int rowIndex)
 {
-	CustomString* newText = new CustomString[_size - 1];
+	CustomString* newContent = new CustomString[_size - 1];
 	for (int oldIndex = 0, newIndex = 0; newIndex < _size - 1; oldIndex++, newIndex++)
 	{
 		if (oldIndex == rowIndex)
 			oldIndex++;
-		newText[newIndex] = _content[oldIndex];
+		newContent[newIndex] = _content[oldIndex];
 	}
 	_size--;
-	SetContent(newText, _size);
+	SetContent(newContent, _size);
 }
 
 void Text::DeleteRow(CustomString searchedSubstring)  // deletes all rows containing a specified substring
@@ -117,9 +117,21 @@ void Text::SetUppercase()
 		 for (int j = 0; j < tempStringSize; j++)
 		 {
 			 char checkChar = tempString[j];
-			 if (islower(checkChar) && (j == 0 || _content[i].GetString()[j - 1] == ' '))
+			 //if (islower(checkChar) && (j == 0 || _content[i].GetString()[j - 1] == ' '))
+			 //{
+				// tempString[j] = (char)((int)checkChar - 32);
+			 //}
+			 if (j == 0)
 			 {
-				 tempString[j] = (char)((int)checkChar - 32);
+				 if (islower(checkChar))
+				 {
+					 //tempString[j] = (char)((int)checkChar - 32);
+					 tempString[j] = toupper(checkChar - 32);
+				 }
+			 }
+			 else if (_content[i].GetString()[j - 1] == ' ')
+			 {
+				 tempString[j] = toupper(checkChar - 32);
 			 }
 		 }
 		 _content[i] = CustomString(tempString);
@@ -131,4 +143,5 @@ void Text::Clear()
 	 {
 		 _content[i].Clear();
 	 }
+	 _size = 0;
  }
