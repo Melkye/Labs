@@ -33,7 +33,7 @@ def print_polynomial(div_diffs, x):
             print('+', end = '')
     print()
 
-def cub_spline(x, y, x0):
+def cub_spline(x, y):
     a = []
     b = []
     d = []
