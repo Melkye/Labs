@@ -338,3 +338,6 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/Algorithms/Lab_6_heaps/Lab_6_heaps/output_data
+/Algorithms/Lab_6_heaps/Lab_6_heaps/my_output_data
+/Algorithms/Lab_6_heaps/Lab_6_heaps/input_data

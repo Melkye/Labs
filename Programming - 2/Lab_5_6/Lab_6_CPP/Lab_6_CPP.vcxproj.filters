@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="App\Lab_6.cpp" />
+    <ClCompile Include="back\Shape.cpp" />
+    <ClCompile Include="back\Circle.cpp" />
+    <ClCompile Include="back\Triangle.cpp" />
+    <ClCompile Include="..\..\Lab_4\Lab_4_CPP\Point2D.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="App\Lab_6.h" />
+    <ClInclude Include="back\Shape.h" />
+    <ClInclude Include="back\Circle.h" />
+    <ClInclude Include="Back\Triangle.h" />
+  </ItemGroup>
+</Project>
