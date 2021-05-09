@@ -17,8 +17,8 @@ output_files_2 = ["my_output_data\\my_output_10_2.txt",
 for r_file, w_file_1, w_file_2 in zip(input_files, output_files_1, output_files_2):
     A, sums = hashing.read_data(r_file)
 
-    m1 = int(hashing.np.ceil(len(A)*3))
-    m2 = int(hashing.np.ceil(len(A)*3))
+    m1 = len(A)*3
+    m2 = len(A)*3
 
     T1 = [[] for i in range(m1)]
     T2 = [[] for i in range(m2)]
