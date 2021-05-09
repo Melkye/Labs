@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31005.135
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Lab_7_hash_tables", "Lab_7_hash_tables\Lab_7_hash_tables.pyproj", "{0A4162B9-532D-4290-974D-BAE3D4AAA123}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0A4162B9-532D-4290-974D-BAE3D4AAA123}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A4162B9-532D-4290-974D-BAE3D4AAA123}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E72A347F-8EFC-475D-9A49-62DDB4C32823}
+	EndGlobalSection
+EndGlobal
