@@ -4,7 +4,7 @@ def chained_hash_func_div(key, m):
     return key % m
 
 
-def chained_hash_insert_div(table, key):        # additionally returns number if there is a collision
+def chained_hash_insert_div(table, key):        # additionally returns 1 if there is a collision, 0 otherwise
     collisions = 0;
     table[chained_hash_func_div(key, len(table))].append(key)
     if len(table[chained_hash_func_div(key, len(table))]) > 1:
@@ -20,7 +20,7 @@ def chained_hash_search_div(table, key):
 def chained_hash_func_mult(key, m): 
     return int(np.floor((key*((np.sqrt(5)-1)/2)%1)*m))
 
-def chained_hash_insert_mult(table, key):       # additionally returns number if there is a collision
+def chained_hash_insert_mult(table, key):       # additionally returns 1 if there is a collision, 0 if otherwise
     collisions = 0;
     table[chained_hash_func_mult(key, len(table))].append(key)
     if len(table[chained_hash_func_mult(key, len(table))]) > 1:
@@ -46,7 +46,7 @@ def read_data(filename):
 
 def write_line(filename, line):
     file = open(filename, "a")
-    file.writelines([line, '\n']) # []?
+    file.writelines([line, '\n'])
     file.close()
 
 def sum_search_div(table, sums, file):
