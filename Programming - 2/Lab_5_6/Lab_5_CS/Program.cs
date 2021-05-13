@@ -7,7 +7,7 @@ namespace Lab_5_CS
     {
         static void Main()
         {
-            char[] word = { 'q', 'u', 'e', 's', 't', 'i', 'o', 'n', 's', '?' };
+            char[] word = { 'I', 'C', '-', '0', '1', ' ', 'o', 'n', 'e', ' ', 'l', 'o', 'v', 'e'};
             CustomString S1 = new CustomString(word);
 
             char[] nums = { '1', '2', '3' };
@@ -15,9 +15,9 @@ namespace Lab_5_CS
 
             CustomDigitString D2 = new CustomDigitString();
 
-            char[] mix = { 'q', 'u', '1', 'e', '2', 's'};
+            char[] mix = { 'I', 'C', '-', '0', '1'};
             S2.Flip();
-            word[0] = 'A';
+            word[3] = '9';
         }
     }
 }

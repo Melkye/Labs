@@ -16,10 +16,10 @@ namespace Lines
         public new char[] Line
         {
             get => base.Line;
-
-
             set
             {
+                if (value == null)
+                    throw new NullReferenceException("Array can't be null!");
                 char[] tempLine = new char[value.Length];
                 int nOfNonDigits = 0;
                 for (int i = 0, iTemp = 0; i < value.Length; i++, iTemp++)

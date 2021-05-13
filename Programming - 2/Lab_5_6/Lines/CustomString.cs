@@ -15,24 +15,23 @@ namespace Lines
         }
 
         public int Length => line.Length;
-        public char [] Line
+        public char[] Line
         {
             get
             {
                 char[] outLine = new char[Length];
                 for (int i = 0; i < Length; i++)
-                    outLine[i] = Line[i];
+                    outLine[i] = line[i];
                 return outLine;
             }
             set
             {
                 if (value == null)
-                    throw new NullReferenceException("Array can't be null!");
+                    throw new NullReferenceException("Array can't be null");
                 line = new char[value.Length];
                 for (int i = 0; i < Length; i++)
                     line[i] = value[i];
             }
         }
-
     }
 }
