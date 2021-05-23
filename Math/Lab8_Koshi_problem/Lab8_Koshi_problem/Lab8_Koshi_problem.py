@@ -1,4 +1,3 @@
-#Lab8_Koshi_problem.py
 import methods
 import matplotlib.pyplot as plt
 

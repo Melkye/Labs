@@ -1,4 +1,3 @@
-#methods.py
 import numpy as np
 
 def runge_kutta(x0, y0, x_end, func, h, eval_theta):
