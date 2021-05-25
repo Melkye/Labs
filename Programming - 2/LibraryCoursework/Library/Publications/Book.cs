@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Library
+namespace LibraryBack.Publications
 {
-    public class Book : Publication//, IEquatable<Book>//IComparable<Book> //??
+    public class Book : Publication, IComparable<Book>//, IEquatable<Book>// //??
     {
-        // override sn?
-        public Book() { } // do I need this?
         public Book(Book copyBook)
             : this(copyBook.ID, copyBook.Title, copyBook.Author, copyBook.Genre)
         {  }
@@ -20,16 +16,23 @@ namespace Library
         }
 
         public BookGenre Genre { get; private set; }
+
         public bool Equals(Book comparedBook)
         {
             if (comparedBook == null) return false;
             return ID.Equals(comparedBook.ID);
         }
+        public int CompareTo(Book comparedBook)
+        {
+            if (comparedBook == null)
+                return 0;
+            else
+                return ID.CompareTo(comparedBook.ID);
+        }
         public override string ToString()
         {
-            return $"{Title} {Author.givenName} {Author.familyName} {Genre} {ID}";
+            return $"{ID, 3} {Title, -25} {Author.givenName, -15} {Author.familyName, -15} {Genre, -15}";
         }
-        public enum BookGenre { Fantasy, Horror, Thriller, SciFi, NonFiction};
 
     }
 }

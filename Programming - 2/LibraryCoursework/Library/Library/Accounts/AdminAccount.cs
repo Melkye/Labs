@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Library
+namespace LibraryBack.Library.Accounts
 {
     class AdminAccount //: IAccount
     {

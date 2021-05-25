@@ -1,16 +1,16 @@
 ﻿using System;
-using Library;
+using System.Text;
 
 namespace Application
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            Book book1 = new Book(1, "abuba", ("Me", "Myself"), Book.BookGenre.NonFiction);
-            Console.WriteLine(book1.ToString());
-            Console.ReadKey();
+            Console.OutputEncoding = Encoding.UTF8;
+            LibraryFront.CreateLibrary("Remote Library 451°");
+            LibraryFront.StartMenu();
         }
     }
-    // add method ListAllPubs here that gets (const?) list of pubs as input
+    
 }
