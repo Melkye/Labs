@@ -2,7 +2,7 @@
 
 namespace LibraryBack.Publications
 {
-    public class Book : Publication, IComparable<Book>//, IEquatable<Book>// //??
+    public class Book : Publication, IComparable<Book>
     {
         public Book(Book copyBook)
             : this(copyBook.ID, copyBook.Title, copyBook.Author, copyBook.Genre)
@@ -16,12 +16,6 @@ namespace LibraryBack.Publications
         }
 
         public BookGenre Genre { get; private set; }
-
-        public bool Equals(Book comparedBook)
-        {
-            if (comparedBook == null) return false;
-            return ID.Equals(comparedBook.ID);
-        }
         public int CompareTo(Book comparedBook)
         {
             if (comparedBook == null)
@@ -31,7 +25,7 @@ namespace LibraryBack.Publications
         }
         public override string ToString()
         {
-            return $"{ID, 3} {Title, -25} {Author.givenName, -15} {Author.familyName, -15} {Genre, -15}";
+            return $"{ID, 3} {Title, -30} {Author.givenName, -15} {Author.familyName, -15} {Genre, -15}";
         }
 
     }

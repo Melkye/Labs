@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Text.RegularExpressions;
 using LibraryBack.Publications;
 using LibraryBack.Library.Accounts;
 using LibraryBack.Library.Exceptions;
@@ -16,12 +16,14 @@ namespace LibraryBack.Library
     public class Library
     {
         private const int MaxTakenPubs = 10;
+        private const int MinLoginLength = 3;
+        private const int MaxLoginLength = 30;
         private int _uniqueBooksCount = 0;
         private int _uniqueSerialPublicationsCount = 0;
         private int _uniqueUsersCount = 0;
-        private List<Book> _bookList;                                //change access modif's!!!!
+        private List<Book> _bookList;
         private List<SerialPublication> _serialPublicationList;
-        private List<UserAccount> _accountList;     //make List<UserAccount>?
+        private List<UserAccount> _accountList;
         public Library(string name)
         {
             Name = name;
@@ -32,9 +34,20 @@ namespace LibraryBack.Library
             AddPublication(new Book(0, "451° Farenheit", ("Ray", "Bradbury"), BookGenre.Dystopia));
             AddPublication(new Book(0, "To Kill a Mockingbird", ("Harper", "Lee"), BookGenre.Bildungsroman));
             AddPublication(new Book(0, "Winnie-the-Pooh", ("Alan", "Milne"), BookGenre.Children));
+            AddPublication(new Book(0, "The House at Pooh Corner", ("Alan", "Milne"), BookGenre.Children));
+            AddPublication(new Book(0, "1984", ("George", "Orwell"), BookGenre.Dystopia));
+            AddPublication(new Book(0, "A Game of Thrones", ("George", "Martin"), BookGenre.Fantasy));
+            AddPublication(new Book(0, "Thinking, Fast and Slow", ("Daniel", "Kahneman"), BookGenre.NonFiction));
+            AddPublication(new Book(0, "I, Robot", ("Isaac", "Asimov"), BookGenre.SciFi));
+            AddPublication(new Book(0, "The Silent Patient", ("Alex", "Michaelides"), BookGenre.Thriller));
+            AddPublication(new Book(0, "When We Were Very Young", ("Alan", "Milne"), BookGenre.Children));
+            AddPublication(new Book(0, "The Adventures of Tom Sawyer", ("Mark", "Twain"), BookGenre.Bildungsroman));
 
-            AddPublication(new SerialPublication(0, "Включаемось нама чого", ("The Great", "Illusionist")));
-            AddPublication(new SerialPublication(0, "A name", ("An", "Author")));
+            AddPublication(new SerialPublication(0, "Vkluchaiemos nema choho", ("The Great", "Illusionist")));
+            AddPublication(new SerialPublication(0, "Let’s learn about touch", ("Bethany", "Brookshire")));
+            AddPublication(new SerialPublication(0, "Scientists Say: Pollen", ("Bethany", "Brookshire")));
+            AddPublication(new SerialPublication(0, "What are cicadas?", ("Sid", "Perkins")));
+            AddPublication(new SerialPublication(0, "Greening your digital life", ("Kathryn", "Hulick")));
         }
 
         public string Name { get; private set; }
@@ -48,38 +61,12 @@ namespace LibraryBack.Library
             {
                 _uniqueBooksCount++;
                 _bookList.Add(new Book(_uniqueBooksCount, pub.Title, pub.Author, (pub as Book).Genre));
-                _bookList.Sort();
             }
             else if (pub is SerialPublication)
             {
                 _uniqueSerialPublicationsCount++;
                 _serialPublicationList.Add(new SerialPublication(_uniqueSerialPublicationsCount, pub.Title, pub.Author));
-                _serialPublicationList.Sort();
             }
-        }
-        /// <exception cref="PublicationNotFoundException">
-        /// Thrown when library doesn't have the book subjected to remove
-        /// </exception>
-        public void RemoveBook(int bookID)
-        {
-            if (_bookList.Exists(x => x.ID == bookID))
-            {
-                _bookList.Remove(_bookList.Find(x => x.ID == bookID));
-            }
-            else
-                throw new PublicationNotFoundException("Library doesn't contain this book. Removal is impossible.");
-        }
-        /// <exception cref="PublicationNotFoundException">
-        /// Thrown when library doesn't have the SP subjected to remove
-        /// </exception>
-        public void RemoveSP(int serialPublicationID)
-        {
-            if (_serialPublicationList.Exists(x => x.ID == serialPublicationID))
-            {
-                _serialPublicationList.Remove(_serialPublicationList.Find(x => x.ID == serialPublicationID));
-            }
-            else
-                throw new PublicationNotFoundException("Library doesn't contain this serial publication. Removal is impossible.");
         }
         /// <exception cref="PublicationNotFoundException">
         /// Thrown when library doesn't have now and didn't have the desired publication before
@@ -97,25 +84,28 @@ namespace LibraryBack.Library
         {
             if (pubType == PublicationType.Book)
             {
-                if (_bookList.Exists(x => x.ID == pubID))
+                if (pubID > 0 && pubID <= _uniqueBooksCount)
                 {
-                    Book book = _bookList.Find(x => x.ID == pubID);
-                    UserAccount user = FindUserAccount(userID);
-                    if (user != null)
+                    if (_bookList.Exists(x => x.ID == pubID))
                     {
-                        if (user.PublicationsTaken.Count < MaxTakenPubs)
+                        Book book = _bookList.Find(x => x.ID == pubID);
+                        UserAccount user = FindUserAccount(userID);
+                        if (user != null)
                         {
-                            user.TakePublication(book);
-                            _bookList.Remove(book);
+                            if (user.PublicationsTaken.Count < MaxTakenPubs)
+                            {
+                                user.TakePublication(book);
+                                _bookList.Remove(book);
+                            }
+                            else
+                                throw new PublicationsLimitReachedException("Max quantity of publications reached. Return a publication to take a new one");
                         }
                         else
-                            throw new PublicationsLimitReachedException("Max quantity of publications reached. Return a publication to take a new one");
+                            throw new InvalidIDException("No user with such ID found");
                     }
                     else
-                        throw new InvalidIDException("No user with such ID found");
+                        throw new PublicationTakenException("Someone took this book");
                 }
-                else if (pubID <= _uniqueBooksCount)
-                    throw new PublicationTakenException("Someone took this book");
                 else
                     throw new PublicationNotFoundException("No such books in library");
             }
@@ -143,8 +133,6 @@ namespace LibraryBack.Library
                 else
                     throw new PublicationNotFoundException("No such SPs in library");
             }
-            //else
-            //    throw new InvalidPublicationTypeException("Invalid publication type");
         }
         /// <exception cref="InvalidIDException">
         /// Thrown when user account with the desired ID doesn't exist in the library
@@ -157,13 +145,21 @@ namespace LibraryBack.Library
             UserAccount user = FindUserAccount(userID);
             if (user != null)
             {
+                if (user.PublicationsTaken.Count == 0)
+                    throw new PublicationNotFoundException("Nothing to return");
                 Publication returnPub = user.ReturnPublication(pubType, pubID);
                 if (returnPub != null)
                 {
                     if (returnPub is Book)
+                    {
                         _bookList.Add(returnPub as Book);
+                        _bookList.Sort();
+                    }
                     else
+                    {
                         _serialPublicationList.Add(returnPub as SerialPublication);
+                        _serialPublicationList.Sort();
+                    }
                 }
                 else
                     throw new PublicationNotFoundException("User didn't take such publication");
@@ -171,10 +167,24 @@ namespace LibraryBack.Library
             else
                 throw new InvalidIDException("Invalid user ID");
         }
+        /// <exception cref="InvalidLoginException">
+        /// Thrown when specified login already exists in other account; when login is too short or too long
+        /// </exception>
         public void CreateUserAccount(string login)
         {
-            _uniqueUsersCount++;
-            _accountList.Add(new UserAccount(_uniqueUsersCount, login));
+            if (login.Length < MinLoginLength || login.Length > MaxLoginLength)
+            {
+                throw new InvalidLoginException($"Inappropriate login length. Should be {MinLoginLength} to {MaxLoginLength} symbols long");
+            }
+            else if (_accountList.Exists(x => x.Login == login))
+            {
+                throw new InvalidLoginException("An account with such login already exists");
+            }
+            else
+            {
+                _uniqueUsersCount++;
+                _accountList.Add(new UserAccount(_uniqueUsersCount, login));
+            }
         }
         /// <exception cref="PublicationTakenException">
         /// Thrown when user has one or more publications taken and wants to delete their account
@@ -185,9 +195,14 @@ namespace LibraryBack.Library
             if (user != null)
             {
                 if (user.PublicationsTaken.Count != 0)
+                {
                     throw new PublicationTakenException("You must return all taken publications before deleting your account");
+                }
                 else
+                {
                     _accountList.Remove(user);
+                }
+                   
             }
         }
         /// <summary>
@@ -247,7 +262,7 @@ namespace LibraryBack.Library
         {
             List<Publication> foundPublications = new List<Publication>();
             foundPublications.AddRange(_bookList.FindAll(x => x.Title.Contains(title)));
-            foundPublications.AddRange(_serialPublicationList.FindAll(x => x.Title == title));
+            foundPublications.AddRange(_serialPublicationList.FindAll(x => x.Title.Contains(title)));
             return foundPublications;
         }
         /// <summary>

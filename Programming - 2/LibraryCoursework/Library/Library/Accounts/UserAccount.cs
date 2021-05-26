@@ -6,7 +6,7 @@ using LibraryBack.Library.Exceptions;
 
 namespace LibraryBack.Library.Accounts
 {
-    public class UserAccount : IAccount //change access modif's
+    public class UserAccount : IAccount
     {
         private List<Publication> _publicationsTaken;
         public UserAccount(int id, string login)
@@ -34,9 +34,7 @@ namespace LibraryBack.Library.Accounts
                 _publicationsTaken.Add(new SerialPublication(pub as SerialPublication));
             }
         }
-        public Publication ReturnPublication(PublicationType pubType, int id) // pass only ID, check if pubsTaken has two pubs with such id
-                                                                             // i. e. has a book and a SP with similar ID's
-                                                                            // then ask which should be returned, get answer (HOW?) and return
+        public Publication ReturnPublication(PublicationType pubType, int id)
         {
             Publication returnPub = null;
             if (pubType == PublicationType.Book)

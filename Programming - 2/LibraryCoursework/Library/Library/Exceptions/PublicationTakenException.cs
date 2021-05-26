@@ -2,7 +2,7 @@
 
 namespace LibraryBack.Library.Exceptions
 {
-    class PublicationTakenException : InvalidOperationException
+    public class PublicationTakenException : InvalidOperationException
     {
         public PublicationTakenException() :
             base()

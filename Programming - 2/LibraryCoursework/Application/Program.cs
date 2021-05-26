@@ -7,7 +7,6 @@ namespace Application
     {
         static void Main()
         {
-            Console.OutputEncoding = Encoding.UTF8;
             LibraryFront.CreateLibrary("Remote Library 451°");
             LibraryFront.StartMenu();
         }

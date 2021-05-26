@@ -2,7 +2,7 @@
 
 namespace LibraryBack.Library.Exceptions
 {
-    class PublicationsLimitReachedException : InvalidOperationException
+    public class PublicationsLimitReachedException : InvalidOperationException
     {
         public PublicationsLimitReachedException() :
             base()

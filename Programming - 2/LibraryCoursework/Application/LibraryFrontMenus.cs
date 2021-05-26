@@ -28,21 +28,18 @@ namespace Application
                     "1. Log in"      + "\t\t" + "4. List all available books " + "\n" +
                     "2. Register"    + "\t\t" + "5. List all serial available publications" + "\n" +
                     "3. Search "     + "\t\t" + "6. Exit" + "\n");
+
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.Write("Your choice: ");
-
                 bool correctInput = int.TryParse(Console.ReadLine(), out int choice);
                 while (correctInput == false)
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Wrong choice input.  Should be integer 1 to 6");
-                    Console.ForegroundColor = ConsoleColor.White;
+                    PrintErrorMessage("Wrong choice input.  Should be integer 1 to 6");
                 }
-
                 switch (choice)
                 {
                     case 1:
-                        Console.Write("Enter account ID:");
+                        Console.Write("Enter account ID: ");
                         correctInput = int.TryParse(Console.ReadLine(), out int userID);
                         if (correctInput)
                         {
@@ -50,18 +47,14 @@ namespace Application
                         }
                         else
                         {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("Wrong input of account ID");
-                            Console.ForegroundColor = ConsoleColor.White;
+                            PrintErrorMessage("Wrong input of account ID");
                         }
                         break;
                     case 2:
                         Console.Write("Enter new login: ");
                         string login = Console.ReadLine();
-                        
-                        Console.WriteLine("New account created" + "\n");
-                        _lib.CreateUserAccount(login);
-                        UserMenu(_lib.FindUserAccount(login).ID);
+                        if (CreateUserAccount(login))
+                            UserMenu(_lib.FindUserAccount(login).ID);
                         break;
                     case 3:
                         SearchMenu();
@@ -73,183 +66,182 @@ namespace Application
                         ListAllSPs();
                         break;
                     case 6:
-                        startMenuWorking = false; ///?
+                        startMenuWorking = false;
                         break;
                     default:
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("Wrong choice input. No such option number exists. Should be integer 1 to 6");
-                        Console.ForegroundColor = ConsoleColor.White;
+                        PrintErrorMessage("Wrong choice input. No such option number exists. Should be integer 1 to 6");
                         break;
                 }
             }
         }
-        public static void UserMenu(int userID)
+        private static void UserMenu(int userID)
         {
-            UserAccount user = _lib.FindUserAccount(userID);
-            if (user != null)
+            if (userID > 0)
             {
-                Console.WriteLine($"User: {user.Login} \t ID: {user.ID}");
-                bool userMenuWorking = true;
-                while (userMenuWorking)
+                UserAccount user = _lib.FindUserAccount(userID);
+                if (user != null)
                 {
-                    Console.ForegroundColor = ConsoleColor.Blue;
-                    Console.WriteLine(
-                        "\n" +
-                        "Select an option:" + "\n" +
-                        "1. Take a publication"      + "\t\t" + "5. List all taken publications" + "\n" +
-                        "2. Return a publication"    + "\t\t" + "6. List all available books" + "\n" +
-                        "3. Search " + "\t"          + "\t\t" + "7. List all available serial publications" + "\n" +
-                        "4. Delete account"          + "\t\t" + "8. Exit" + "\n\n");
-                    Console.ForegroundColor = ConsoleColor.White;
-                    Console.Write("Your choice: ");
-                    bool correctChoiceInput = int.TryParse(Console.ReadLine(), out int choice);
-                    if (correctChoiceInput)
+                    bool userMenuWorking = true;
+                    while (userMenuWorking)
                     {
-                        switch (choice)
+                        Console.WriteLine("\n" + $"User: {user.Login} \t ID: {user.ID}");
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        Console.WriteLine(
+                            "\t" + "Select an option:" + "\n" +
+                            "1. Take a publication" + "\t\t" + "5. List all taken publications" + "\n" +
+                            "2. Return a publication" + "\t\t" + "6. List all available books" + "\n" +
+                            "3. Search " + "\t" + "\t\t" + "7. List all available serial publications" + "\n" +
+                            "4. Delete account" + "\t\t" + "8. Exit" + "\n\n");
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.Write("Your choice: ");
+                        bool correctChoiceInput = int.TryParse(Console.ReadLine(), out int choice);
+                        if (correctChoiceInput)
                         {
-                            case 1:
-                                Console.WriteLine(
-                                    "\n" +
-                                    "\t" + "Select publication type:" + "\n" +
-                                    "1. Book" + "\n" +
-                                    "2. Serial publication" + "\n");
-                                Console.Write("Your choice: ");
-                                bool correctPubTypeInput = int.TryParse(Console.ReadLine(), out int choicePubType);
-                                if (correctPubTypeInput)
-                                {
-                                    PublicationType pubType;
-                                    if (choicePubType == 1)
+                            switch (choice)
+                            {
+                                case 1:
+                                    Console.WriteLine(
+                                        "\n" +
+                                        "\t" + "Select publication type:" + "\n" +
+                                        "1. Book" + "\n" +
+                                        "2. Serial publication" + "\n");
+                                    Console.Write("Your choice: ");
+                                    bool correctPubTypeInput = int.TryParse(Console.ReadLine(), out int choicePubType);
+                                    if (correctPubTypeInput)
                                     {
-                                        pubType = PublicationType.Book;
-                                    }
-                                    else if (choicePubType == 2)
-                                    {
-                                        pubType = PublicationType.SerialPublication;
-                                    }
-                                    else
-                                    {
-                                        Console.ForegroundColor = ConsoleColor.Red;
-                                        Console.WriteLine("Wrong input of publication type");
-                                        Console.ForegroundColor = ConsoleColor.White;
-                                        break;/////?? exit from switch block
-                                    }
-                                    Console.WriteLine($"Enter {pubType.GetType()} ID:"); ///
-                                    bool correctIDInput = int.TryParse(Console.ReadLine(), out int pubID);
-                                    if (correctIDInput)
-                                    {
-                                        _lib.TakePublication(userID, pubType, pubID);  // try/catch here
-                                    }
-                                    else
-                                    {
-                                        Console.ForegroundColor = ConsoleColor.Red;
-                                        Console.WriteLine($"Wrong input of {pubType.GetType()} ID");
-                                        Console.ForegroundColor = ConsoleColor.White;
-                                    }
-                                }
-                                else
-                                {
-                                    Console.ForegroundColor = ConsoleColor.Red;
-                                    Console.WriteLine($"Wrong input of publication type");
-                                    Console.ForegroundColor = ConsoleColor.White;
-                                }
-                                break;
-                            case 2:
-                                Console.WriteLine(
-                                    "\n" +
-                                    "\t" + "Select publication type:" + "\n" +
-                                    "1. Book" + "\n" +
-                                    "2. Serial publication" + "\n");
-                                Console.Write("Your choice: ");
-                                correctPubTypeInput = int.TryParse(Console.ReadLine(), out choicePubType); // why vars are defined already?
-                                if (correctPubTypeInput)
-                                {
-                                    PublicationType pubType;
-                                    if (choicePubType == 1)
-                                    {
-                                        pubType = PublicationType.Book;
-                                    }
-                                    else if (choicePubType == 2)
-                                    {
-                                        pubType = PublicationType.SerialPublication;
+                                        PublicationType pubType;
+                                        if (choicePubType == 1)
+                                        {
+                                            pubType = PublicationType.Book;
+                                            ListAllBooks();
+                                            Console.Write("Enter book's ID: ");
+                                        }
+                                        else if (choicePubType == 2)
+                                        {
+                                            pubType = PublicationType.SerialPublication;
+                                            ListAllSPs();
+                                            Console.Write("Enter SP's ID: ");
+                                        }
+                                        else
+                                        {
+                                            PrintErrorMessage("Wrong input of publication type. Should be integer 1 or 2");
+                                            break;
+                                        }
+                                        bool correctIDInput = int.TryParse(Console.ReadLine(), out int pubID);
+                                        if (correctIDInput)
+                                        {
+                                            TakePublication(userID, pubType, pubID);
+                                        }
+                                        else
+                                        {
+                                            PrintErrorMessage("Wrong input of ID. Should be integer greater than 0");
+                                        }
                                     }
                                     else
                                     {
-                                        Console.ForegroundColor = ConsoleColor.Red;
-                                        Console.WriteLine("Wrong input of publication type");
-                                        Console.ForegroundColor = ConsoleColor.White;
-                                        break;/////?? exit from switch block
+                                        PrintErrorMessage("Wrong input of publication type. Should be 1 or 2");
                                     }
-                                    Console.WriteLine($"Enter {pubType.GetType()} ID:"); ///
-                                    bool correctIDInput = int.TryParse(Console.ReadLine(), out int pubID);
-                                    if (correctIDInput)
+                                    break;
+                                case 2:
+                                    if (user.PublicationsTaken.Count == 0)
                                     {
-                                        _lib.ReturnPublication(userID, pubType, pubID);  // try/catch here
+                                        Console.WriteLine("Nothing to return");
+                                        break;
                                     }
                                     else
                                     {
-                                        Console.ForegroundColor = ConsoleColor.Red;
-                                        Console.WriteLine($"Wrong input of {pubType.GetType()} ID");
-                                        Console.ForegroundColor = ConsoleColor.White;
+                                        ListAllPubsTaken(userID);
                                     }
-                                }
-                                else
-                                {
-                                    Console.ForegroundColor = ConsoleColor.Red;
-                                    Console.WriteLine("Wrong input of publication type");
-                                    Console.ForegroundColor = ConsoleColor.White;
-                                }
-                                break;
-                            case 3:
-                                SearchMenu();
-                                break;
-                            case 4:
-                                    _lib.DeleteUserAccount(userID);  // try/catch here
-                                break;
-                            case 5:
-                                Console.WriteLine("\n" + "\t" + $"All publications taken by user {user.Login}:");
-                                ListAllPubsTaken(userID);
-                                break;
-                            case 6:
-                                ListAllBooks();
-                                break;
-                            case 7:
-                                ListAllSPs();
-                                break;
-                            case 8:
-                                userMenuWorking = false;
-                                break;
-                            default:
-                                Console.ForegroundColor = ConsoleColor.Red;
-                                Console.WriteLine("Wrong choice input. No such option number exists. Should be integer 1 to 8");
-                                Console.ForegroundColor = ConsoleColor.White;
-                                break;
+                                    Console.WriteLine(
+                                        "\n" +
+                                        "\t" + "Select publication type:" + "\n" +
+                                        "1. Book" + "\n" +
+                                        "2. Serial publication" + "\n");
+                                    Console.Write("Your choice: ");
+                                    correctPubTypeInput = int.TryParse(Console.ReadLine(), out choicePubType);
+                                    if (correctPubTypeInput)
+                                    {
+                                        PublicationType pubType;
+                                        if (choicePubType == 1)
+                                        {
+                                            pubType = PublicationType.Book;
+                                            Console.Write("Enter book's ID: ");
+                                        }
+                                        else if (choicePubType == 2)
+                                        {
+                                            pubType = PublicationType.SerialPublication;
+                                            Console.Write("Enter SP's ID: ");
+                                        }
+                                        else
+                                        {
+                                            PrintErrorMessage("Wrong input of publication type. Should be 1 or 2");
+                                            break;
+                                        }
+                                        bool correctIDInput = int.TryParse(Console.ReadLine(), out int pubID);
+                                        if (correctIDInput)
+                                        {
+                                            ReturnPublication(userID, pubType, pubID);
+                                        }
+                                        else
+                                        {
+                                            PrintErrorMessage("Wrong input of ID. Should be integer greater than 0");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        PrintErrorMessage("Wrong input of publication type. Should be integer 1 or 2");
+                                    }
+                                    break;
+                                case 3:
+                                    SearchMenu();
+                                    break;
+                                case 4:
+                                    DeleteUserAccount(userID);
+                                    userMenuWorking = false;
+                                    break;
+                                case 5:
+                                    ListAllPubsTaken(userID);
+                                    break;
+                                case 6:
+                                    ListAllBooks();
+                                    break;
+                                case 7:
+                                    ListAllSPs();
+                                    break;
+                                case 8:
+                                    userMenuWorking = false;
+                                    break;
+                                default:
+                                    PrintErrorMessage("Wrong choice input. No such option number exists. Should be integer 1 to 8");
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            PrintErrorMessage("Wrong choice input. Should be integer 1 to 8");
                         }
                     }
-                    else
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("Wrong choice input. Should be integer 1 to 8");
-                        Console.ForegroundColor = ConsoleColor.White;
-                    }
+                }
+                else
+                {
+                    PrintErrorMessage("User not found");
                 }
             }
             else
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("User not found");
-                Console.ForegroundColor = ConsoleColor.White;
+                PrintErrorMessage("Wrong user ID input. Must be integer greater than 0");
             }
+            
         }
-
-        public static void SearchMenu()
+        private static void SearchMenu()
         {
             Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.WriteLine(
                 "\n" +
                 "\t" + "Select search parameter:" + "\n" +
-                "1. Title" + "\n" +
-                "2. ID" + "\n" +
-                "3. Author" + "\n");
+                "1. Title"  + "\t" + "- searches for publications that contain specified symbols" + "\n" +
+                "2. ID   "  + "\t" + "- searches for publications that have specified ID" + "\n" +
+                "3. Author" + "\t" + "- searches for publications that have specified author" + "\n");
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write("Your choice: ");
             bool correctSearchParamInput = int.TryParse(Console.ReadLine(), out int choiceSearchParam);
@@ -258,42 +250,38 @@ namespace Application
                 switch (choiceSearchParam)
                 {
                     case 1:
-                        Console.WriteLine("Enter publication title:");
+                        Console.Write("Enter publication title: ");
                         string title = Console.ReadLine();
                         List < Publication > foundPubs= _lib.SearchPublications(title);
                         if (foundPubs.Count == 0)
                         {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("No publications found");
-                            Console.ForegroundColor = ConsoleColor.White;
+                            PrintErrorMessage("No publications found");
                         }
                         else
                         {
+                            Console.WriteLine("\n" + "\t" + "All found publications: ");
                             ListPublications(foundPubs);
                         }
                         break;
                     case 2:
-                        Console.WriteLine("Enter publication ID:");
+                        Console.Write("Enter publication ID: ");
                         bool correctIDInput = int.TryParse(Console.ReadLine(), out int pubID);
                         if (correctIDInput)
                         {
                             foundPubs = _lib.SearchPublications(pubID);
                             if (foundPubs.Count == 0)
                             {
-                                Console.ForegroundColor = ConsoleColor.Red;
-                                Console.WriteLine("No publications found");
-                                Console.ForegroundColor = ConsoleColor.White;
+                                PrintErrorMessage("No publications found");
                             }
                             else
                             {
+                                Console.WriteLine("\n" + "\t" + "All found publications: ");
                                 ListPublications(foundPubs);
                             }
                         }
                         else
                         {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("Wrong input of publication ID");
-                            Console.ForegroundColor = ConsoleColor.White;
+                            PrintErrorMessage("Wrong input of publication ID");
                         }
                         break;
                     case 3:
@@ -304,27 +292,22 @@ namespace Application
                         foundPubs = _lib.SearchPublications((givenName, familyName));
                         if (foundPubs.Count == 0)
                         {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("No publications found");
-                            Console.ForegroundColor = ConsoleColor.White;
+                            PrintErrorMessage("No publications found");
                         }
                         else
                         {
+                            Console.WriteLine("\n" + "\t" + "All found publications: ");
                             ListPublications(foundPubs);
                         }
                         break;
                     default:
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("Wrong choice input. Should be integer 1 to 3");
-                        Console.ForegroundColor = ConsoleColor.White;
+                        PrintErrorMessage("Wrong choice input. Should be integer 1 to 3");
                         break;
                 }
             }
             else
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Wrong input of search parameter. Should be integer 1 to 4");
-                Console.ForegroundColor = ConsoleColor.White;
+                PrintErrorMessage("Wrong input of search parameter. Should be integer 1 to 4");
             }
         }
     }

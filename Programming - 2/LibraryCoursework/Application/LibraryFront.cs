@@ -9,7 +9,7 @@ using LibraryBack.Publications;
 namespace Application
 {
     /// <summary>
-    /// contains Library class and methods to operate it in console
+    /// Contains Library class and methods to operate it in console
     /// </summary>
     public static partial class LibraryFront 
     {
@@ -20,44 +20,136 @@ namespace Application
         {
             _lib = new Library(name);
         }
-        public static void ListAllBooks()
+        private static void ListAllBooks()
         {
-            Console.WriteLine("\n" + "\t" + "All available books:");
-            List < Book > bookList = _lib.BookList;
-            Console.WriteLine($"{"ID", 3} {"Title", -25} {"Author", -31} {"Genre", -15}");
-            foreach (Book book in bookList)
+            List<Book> bookList = _lib.BookList;
+            if (bookList.Count == 0)
             {
-                Console.WriteLine(book.ToString());
+                Console.WriteLine("\n" + "\t" + "No book available");
             }
+            else
+            {
+                Console.WriteLine("\n" + "\t" + "All available books:");
+                Console.WriteLine($"{"ID",3} {"Title",-30} {"Author",-31} {"Genre",-15}");
+                foreach (Book book in bookList)
+                {
+                    Console.WriteLine(book.ToString());
+                }
+            }
+            Console.WriteLine();
         }
-        public static void ListAllSPs()
+        private static void ListAllSPs()
         {
-            Console.WriteLine("\n" + "\t" + "All available serial publications:");
             List<SerialPublication> spList = _lib.SerialPublicationList;
-            Console.WriteLine($"{"ID", 3} {"Title", -25} {"Author", -31}");
-            foreach (SerialPublication sp in spList)
+            if (spList.Count == 0)
             {
-                Console.WriteLine(sp.ToString());
+                Console.WriteLine("\n" + "\t" + "No serial publications available");
             }
+            else
+            {
+                Console.WriteLine("\n" + "\t" + "All available serial publications:");
+                Console.WriteLine($"{"ID",3} {"Title",-30} {"Author",-31}");
+                foreach (SerialPublication sp in spList)
+                {
+                    Console.WriteLine(sp.ToString());
+                }
+            }
+            Console.WriteLine();
         }
-        public static void ListPublications(List<Publication> pubs)
+        private static void ListPublications(List<Publication> pubs)
         {
-            Console.WriteLine($"{"ID",3} {"Title",-25} {"Author",-31} {"Genre (for books)",-15}");
+            Console.WriteLine($"{"ID",3} {"Title",-30} {"Author",-31} {"Genre (for books)",-15}");
             foreach (Publication pub in pubs)
             {
                 Console.WriteLine(pub.ToString());
             }
         }
-
-        public static void CreateUserAccount(string login)
+        /// <summary>
+        /// Creates a new account prompting library to do this
+        /// </summary>
+        /// <returns> true if creation successful, false otherwise</returns>
+        private static bool CreateUserAccount(string login)
         {
-            _lib.CreateUserAccount(login);
+            bool creationSuccessful = false;
+            try
+            {
+               _lib.CreateUserAccount(login);
+                creationSuccessful = true;
+                Console.WriteLine("New account created");
+            }
+            catch (InvalidLoginException e)
+            {
+                PrintErrorMessage(e.Message);
+            }
+            catch (Exception e)
+            {
+                PrintErrorMessage("Error happened: " + e.Message);
+            }
+            return creationSuccessful;
         }
-        public static void DeleteUserAccount(int userID)
+        private static void DeleteUserAccount(int userID)
         {
-            _lib.DeleteUserAccount(userID);
+            try
+            {
+                _lib.DeleteUserAccount(userID);
+                Console.WriteLine("Account deleted" + "\n");
+            }
+            catch (PublicationTakenException e)
+            {
+                PrintErrorMessage(e.Message);
+            }
+            catch (Exception e)
+            {
+                PrintErrorMessage("Error happened: " + e.Message);
+            }
         }
-        public static void ListAllPubsTaken(int userID)
+        private static void TakePublication(int userID, PublicationType pubType, int pubID)
+        {
+            try
+            {
+                _lib.TakePublication(userID, pubType, pubID);
+            }
+            catch (PublicationNotFoundException e)
+            {
+                PrintErrorMessage(e.Message);
+            }
+            catch (PublicationTakenException e)
+            {
+                PrintErrorMessage(e.Message);
+            }
+            catch (InvalidIDException e)
+            {
+                PrintErrorMessage(e.Message);
+            }
+            catch (PublicationsLimitReachedException e)
+            {
+                PrintErrorMessage(e.Message);
+            }
+            catch (Exception e)
+            {
+                PrintErrorMessage("Error happened: " + e.Message);
+            }
+        }
+        private static void ReturnPublication(int userID, PublicationType pubType, int pubID)
+        {
+            try
+            {
+                _lib.ReturnPublication(userID, pubType, pubID);
+            }
+            catch (InvalidIDException e)
+            {
+                PrintErrorMessage(e.Message);
+            }
+            catch (PublicationNotFoundException e)
+            {
+                PrintErrorMessage(e.Message);
+            }
+            catch (Exception e)
+            {
+                PrintErrorMessage("Error happened: " +  e.Message);
+            }
+        }
+        private static void ListAllPubsTaken(int userID)
         {
             UserAccount user = _lib.FindUserAccount(userID);
             if (user != null)
@@ -68,7 +160,8 @@ namespace Application
                 }
                 else
                 {
-                    Console.WriteLine($"{"ID",3} {"Title",-25} {"Author",-31} {"Genre (for books)",-15}");
+                    Console.WriteLine("\n" + "\t" + $"All publications taken by user {user.Login}:");
+                    Console.WriteLine($"{"ID",3} {"Title",-30} {"Author",-31} {"Genre (for books)",-15}");
                     foreach (Publication pub in user.PublicationsTaken)
                     {
                         if (pub is Book)
@@ -80,12 +173,19 @@ namespace Application
                             Console.WriteLine((pub as SerialPublication).ToString());
                         }
                     }
+                    Console.WriteLine();
                 }
             }
             else
             {
-                Console.WriteLine("User not found"); // need this? (LogInMenu checks if user != null)
+                PrintErrorMessage("User not found");
             }
+        }
+        private static void PrintErrorMessage(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(message);
+            Console.ForegroundColor = ConsoleColor.White;
         }
     }
 }

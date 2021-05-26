@@ -13,12 +13,6 @@ namespace LibraryBack.Publications
             Title = title;
             Author = author;
         }
-
-        public bool Equals(SerialPublication comparedSP)
-        {
-            if (comparedSP == null) return false;
-            return ID.Equals(comparedSP.ID);
-        }
         public int CompareTo(SerialPublication comparedSP)
         {
             if (comparedSP == null)
@@ -28,7 +22,7 @@ namespace LibraryBack.Publications
         }
         public override string ToString()
         {
-            return $"{ID, 3} {Title,-25} {Author.givenName,-15} {Author.familyName,-15}";
+            return $"{ID, 3} {Title,-30} {Author.givenName,-15} {Author.familyName,-15}";
         }
     }
 }

@@ -1,13 +1,11 @@
-﻿using System;
-
+﻿
 using LibraryBack.Publications;
 
 namespace LibraryBack.Library.Accounts
 {
-    public interface IAccount // necessary to write "public"?
+    interface IAccount
     {
         void TakePublication(Publication pub);
         Publication ReturnPublication(PublicationType pubType, int id);
-        //void ListAllPublications(); //??????????
     }
 }
