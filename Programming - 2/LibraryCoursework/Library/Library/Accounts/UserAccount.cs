@@ -19,33 +19,20 @@ namespace LibraryBack.Library.Accounts
         public int ID { get; private set; }
         public string Login { get; private set; }
 
-        /// <summary>
-        /// Returns a copy of real list
-        /// </summary>
         public List<Publication> PublicationsTaken
         {
-            get => new List<Publication>(_publicationsTaken); // does it make copy?
+            get => new List<Publication>(_publicationsTaken);
         }
-
         public void TakePublication(Publication pub)
         {
-            if (_publicationsTaken.Count < 10)
+            if (pub is Book)
             {
-                if (pub is Book)
-                {
-                    _publicationsTaken.Add(new Book(pub as Book));
-                }
-                else
-                {
-                    _publicationsTaken.Add(new SerialPublication(pub as SerialPublication));
-                }
+                _publicationsTaken.Add(new Book(pub as Book));
             }
             else
             {
-                // catch and send this to user
-                throw new PublicationsLimitReachedException("Max quantity of publications reached. Return a publication to take a new one");
+                _publicationsTaken.Add(new SerialPublication(pub as SerialPublication));
             }
-
         }
         public Publication ReturnPublication(PublicationType pubType, int id) // pass only ID, check if pubsTaken has two pubs with such id
                                                                              // i. e. has a book and a SP with similar ID's

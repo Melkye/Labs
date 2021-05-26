@@ -8,20 +8,26 @@ using LibraryBack.Library.Exceptions;
 
 namespace LibraryBack.Library
 {
+    /// <summary>
+    /// The main Library class.
+    /// Contais books, serial publications (aggregation) and user accounts (composition)
+    /// and methods to operate them.
+    /// </summary>
     public class Library
     {
+        private const int MaxTakenPubs = 10;
         private int _uniqueBooksCount = 0;
         private int _uniqueSerialPublicationsCount = 0;
         private int _uniqueUsersCount = 0;
         private List<Book> _bookList;                                //change access modif's!!!!
         private List<SerialPublication> _serialPublicationList;
-        private List<IAccount> _accountList;     //make List<UserAccount>?
+        private List<UserAccount> _accountList;     //make List<UserAccount>?
         public Library(string name)
         {
             Name = name;
             _bookList = new List<Book>();
             _serialPublicationList = new List<SerialPublication>();
-            _accountList = new List<IAccount>();
+            _accountList = new List<UserAccount>();
 
             AddPublication(new Book(0, "451° Farenheit", ("Ray", "Bradbury"), BookGenre.Dystopia));
             AddPublication(new Book(0, "To Kill a Mockingbird", ("Harper", "Lee"), BookGenre.Bildungsroman));
@@ -34,7 +40,7 @@ namespace LibraryBack.Library
         public string Name { get; private set; }
         public List<Book> BookList => new List<Book>(_bookList);
         public List<SerialPublication> SerialPublicationList => new List<SerialPublication>(_serialPublicationList);
-        public List<IAccount> AccountList => new List<IAccount>(_accountList);
+        public List<UserAccount> AccountList => new List<UserAccount>(_accountList);
 
         public void AddPublication(Publication pub)
         {
@@ -50,12 +56,11 @@ namespace LibraryBack.Library
                 _serialPublicationList.Add(new SerialPublication(_uniqueSerialPublicationsCount, pub.Title, pub.Author));
                 _serialPublicationList.Sort();
             }
-            else // can this even exist? if so? change UserAccount.TakePublication method
-            {
-                throw new InvalidPublicationTypeException("Impossible to add an item that's not a publication");
-            }
         }
-        public void RemoveBook(int bookID) // private?
+        /// <exception cref="PublicationNotFoundException">
+        /// Thrown when library doesn't have the book subjected to remove
+        /// </exception>
+        public void RemoveBook(int bookID)
         {
             if (_bookList.Exists(x => x.ID == bookID))
             {
@@ -64,7 +69,10 @@ namespace LibraryBack.Library
             else
                 throw new PublicationNotFoundException("Library doesn't contain this book. Removal is impossible.");
         }
-        public void RemoveSP(int serialPublicationID) // private?
+        /// <exception cref="PublicationNotFoundException">
+        /// Thrown when library doesn't have the SP subjected to remove
+        /// </exception>
+        public void RemoveSP(int serialPublicationID)
         {
             if (_serialPublicationList.Exists(x => x.ID == serialPublicationID))
             {
@@ -73,6 +81,18 @@ namespace LibraryBack.Library
             else
                 throw new PublicationNotFoundException("Library doesn't contain this serial publication. Removal is impossible.");
         }
+        /// <exception cref="PublicationNotFoundException">
+        /// Thrown when library doesn't have now and didn't have the desired publication before
+        /// </exception>
+        /// <exception cref="PublicationTakenException">
+        /// Thrown when library doesn't have the desired publication because someone took it earlier
+        /// </exception>
+        /// <exception cref="InvalidIDException">
+        /// Thrown when user account with the desired ID doesn't exist in the library
+        /// </exception>
+        /// <exception cref="PublicationsLimitReachedException">
+        /// Thrown when user reached the limit of 10 publications and wants to take one more
+        /// </exception>
         public void TakePublication(int userID, PublicationType pubType, int pubID)
         {
             if (pubType == PublicationType.Book)
@@ -83,8 +103,13 @@ namespace LibraryBack.Library
                     UserAccount user = FindUserAccount(userID);
                     if (user != null)
                     {
-                        user.TakePublication(book);
-                        _bookList.Remove(book);
+                        if (user.PublicationsTaken.Count < MaxTakenPubs)
+                        {
+                            user.TakePublication(book);
+                            _bookList.Remove(book);
+                        }
+                        else
+                            throw new PublicationsLimitReachedException("Max quantity of publications reached. Return a publication to take a new one");
                     }
                     else
                         throw new InvalidIDException("No user with such ID found");
@@ -102,8 +127,13 @@ namespace LibraryBack.Library
                     UserAccount user = FindUserAccount(userID);
                     if (user != null)
                     {
-                        user.TakePublication(serialPublication);
-                        _serialPublicationList.Remove(serialPublication);
+                        if (user.PublicationsTaken.Count < MaxTakenPubs)
+                        {
+                            user.TakePublication(serialPublication);
+                            _serialPublicationList.Remove(serialPublication);
+                        }
+                        else
+                            throw new PublicationsLimitReachedException("Max quantity of publications reached. Return a publication to take a new one");
                     }
                     else
                         throw new InvalidIDException("No user with such ID found");
@@ -113,10 +143,15 @@ namespace LibraryBack.Library
                 else
                     throw new PublicationNotFoundException("No such SPs in library");
             }
-            else
-                throw new InvalidPublicationTypeException("Invalid publication type");
+            //else
+            //    throw new InvalidPublicationTypeException("Invalid publication type");
         }
-
+        /// <exception cref="InvalidIDException">
+        /// Thrown when user account with the desired ID doesn't exist in the library
+        /// </exception>
+        /// <exception cref="PublicationNotFoundException">
+        /// Thrown when user has no such publication taken as specified
+        /// </exception>
         public void ReturnPublication(int userID, PublicationType pubType, int pubID)
         {
             UserAccount user = FindUserAccount(userID);
@@ -141,6 +176,9 @@ namespace LibraryBack.Library
             _uniqueUsersCount++;
             _accountList.Add(new UserAccount(_uniqueUsersCount, login));
         }
+        /// <exception cref="PublicationTakenException">
+        /// Thrown when user has one or more publications taken and wants to delete their account
+        /// </exception>
         public void DeleteUserAccount(int userID)
         {
             UserAccount user = FindUserAccount(userID);
@@ -152,6 +190,12 @@ namespace LibraryBack.Library
                     _accountList.Remove(user);
             }
         }
+        /// <summary>
+        /// Searches for an account having specified ID
+        /// </summary>
+        /// <returns>
+        /// UserAccount object. null if user wasn't found
+        /// </returns>
         public UserAccount FindUserAccount(int userID)
         {
             foreach (UserAccount user in _accountList)
@@ -163,6 +207,12 @@ namespace LibraryBack.Library
             }
             return null;
         }
+        /// <summary>
+        /// Searches for an account having specified login
+        /// </summary>
+        /// <returns>
+        /// UserAccount object. null if user wasn't found
+        /// </returns>
         public UserAccount FindUserAccount(string login)
         {
             foreach (UserAccount user in _accountList)
@@ -174,7 +224,12 @@ namespace LibraryBack.Library
             }
             return null;
         }
-
+        /// <summary>
+        /// Searches for all publications (both books and SPs) having specified ID 
+        /// </summary>
+        /// <returns>
+        /// List of found publications. Empty list if no publication found.
+        /// </returns>
         public List<Publication> SearchPublications(int id)
         {
             List<Publication> foundPublications = new List<Publication>();
@@ -182,6 +237,12 @@ namespace LibraryBack.Library
             foundPublications.AddRange(_serialPublicationList.FindAll(x => x.ID == id));
             return foundPublications;
         }
+        /// <summary>
+        /// Searches for all publications (both books and SPs) containing specified string in title
+        /// </summary>
+        /// <returns>
+        /// List of found publications. Empty list if no publication found.
+        /// </returns>
         public List<Publication> SearchPublications(string title)
         {
             List<Publication> foundPublications = new List<Publication>();
@@ -189,6 +250,12 @@ namespace LibraryBack.Library
             foundPublications.AddRange(_serialPublicationList.FindAll(x => x.Title == title));
             return foundPublications;
         }
+        /// <summary>
+        /// Searches for all publications (both books and SPs) having specified author
+        /// </summary>
+        /// <returns>
+        /// List of found publications. Empty list if no publication found.
+        /// </returns>
         public List<Publication> SearchPublications((string givenName, string familyName) author)
         {
             List<Publication> foundPublications = new List<Publication>();

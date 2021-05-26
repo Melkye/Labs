@@ -2,7 +2,7 @@
 
 namespace LibraryBack.Library.Exceptions
 {
-    public class InvalidPublicationTypeException : ArgumentException
+    public class InvalidPublicationTypeException : ArgumentException // delete this
     {
         public InvalidPublicationTypeException() :
             base()
