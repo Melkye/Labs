@@ -25,6 +25,7 @@ namespace Lab_7
                 {
                     moreMath[i] = 0;
                     Console.WriteLine($"{i + 1,3}. Error. " + e.Message);
+                    throw new DivideByZeroException("adad", e);
                 }
                 catch (ArithmeticException e)
                 {
