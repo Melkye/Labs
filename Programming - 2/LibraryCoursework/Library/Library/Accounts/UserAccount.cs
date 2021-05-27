@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using LibraryBack.Publications;
-using LibraryBack.Library.Exceptions;
 
 namespace LibraryBack.Library.Accounts
 {

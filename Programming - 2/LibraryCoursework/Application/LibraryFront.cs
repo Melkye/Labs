@@ -20,30 +20,41 @@ namespace Application
         {
             _lib = new Library(name);
         }
-        private static void ListAllBooks()
+        /// <summary>
+        /// Lists all books available to the console or signs that no book is available
+        /// </summary>
+        /// <returns> true if there is at least 1 book available. false otherwise</returns>
+        private static bool ListAllBooks()
         {
             List<Book> bookList = _lib.BookList;
             if (bookList.Count == 0)
             {
                 Console.WriteLine("\n" + "\t" + "No book available");
+                return false;
             }
             else
             {
                 Console.WriteLine("\n" + "\t" + "All available books:");
-                Console.WriteLine($"{"ID",3} {"Title",-30} {"Author",-31} {"Genre",-15}");
+                Console.WriteLine($"{"ID",3} {"Title",-30} {"Author",-31} {"Genre",-15}"); // +1 to author due to space between
+                                                                                           // given name and family name in ToString
                 foreach (Book book in bookList)
                 {
                     Console.WriteLine(book.ToString());
                 }
             }
-            Console.WriteLine();
+            return true;
         }
-        private static void ListAllSPs()
+        /// <summary>
+        /// Lists all SPs available to the console or signs that no PS is available
+        /// </summary>
+        /// <returns> true if there is at least 1 SP available. false otherwise</returns>
+        private static bool ListAllSPs()
         {
             List<SerialPublication> spList = _lib.SerialPublicationList;
             if (spList.Count == 0)
             {
                 Console.WriteLine("\n" + "\t" + "No serial publications available");
+                return false;
             }
             else
             {
@@ -54,7 +65,7 @@ namespace Application
                     Console.WriteLine(sp.ToString());
                 }
             }
-            Console.WriteLine();
+            return true;
         }
         private static void ListPublications(List<Publication> pubs)
         {
@@ -75,6 +86,7 @@ namespace Application
             {
                _lib.CreateUserAccount(login);
                 creationSuccessful = true;
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("New account created");
             }
             catch (InvalidLoginException e)
@@ -87,12 +99,15 @@ namespace Application
             }
             return creationSuccessful;
         }
-        private static void DeleteUserAccount(int userID)
+        private static bool DeleteUserAccount(int userID)
         {
+            bool deletionSuccesful = false;
             try
             {
                 _lib.DeleteUserAccount(userID);
-                Console.WriteLine("Account deleted" + "\n");
+                deletionSuccesful = true;
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("Account deleted");
             }
             catch (PublicationTakenException e)
             {
@@ -102,6 +117,7 @@ namespace Application
             {
                 PrintErrorMessage("Error happened: " + e.Message);
             }
+            return deletionSuccesful;
         }
         private static void TakePublication(int userID, PublicationType pubType, int pubID)
         {

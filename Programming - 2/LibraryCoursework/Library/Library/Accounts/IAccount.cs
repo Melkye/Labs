@@ -1,5 +1,4 @@
-﻿
-using LibraryBack.Publications;
+﻿using LibraryBack.Publications;
 
 namespace LibraryBack.Library.Accounts
 {

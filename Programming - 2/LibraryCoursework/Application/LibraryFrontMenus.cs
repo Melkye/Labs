@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 
 using LibraryBack.Library.Accounts;
-using LibraryBack.Library.Exceptions;
 using LibraryBack.Publications;
 
 namespace Application
@@ -19,59 +18,63 @@ namespace Application
             while (startMenuWorking)
             {
                 Console.ForegroundColor = ConsoleColor.Magenta;
-                Console.Title = LibraryFront.LibraryName;
-                Console.WriteLine("\n" + "\t" + LibraryFront.LibraryName + " welcomes you");
+                Console.Title = LibraryName;
+                Console.WriteLine("\n" + "\t" + LibraryName + " welcomes you");
 
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine(
                     "\t" + "Select an option:" + "\n" +
                     "1. Log in"      + "\t\t" + "4. List all available books " + "\n" +
                     "2. Register"    + "\t\t" + "5. List all serial available publications" + "\n" +
-                    "3. Search "     + "\t\t" + "6. Exit" + "\n");
+                    "3. Search"      + "\t\t" + "6. Exit library" + "\n");
 
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.Write("Your choice: ");
                 bool correctInput = int.TryParse(Console.ReadLine(), out int choice);
-                while (correctInput == false)
+                if (correctInput)
+                {
+                    switch (choice)
+                    {
+                        case 1:
+                            Console.Write("Enter account ID: ");
+                            correctInput = int.TryParse(Console.ReadLine(), out int userID);
+                            if (correctInput)
+                            {
+                                UserMenu(userID);
+                            }
+                            else
+                            {
+                                PrintErrorMessage("Wrong input of account ID");
+                            }
+                            break;
+                        case 2:
+                            Console.Write("Enter new login: ");
+                            string login = Console.ReadLine();
+                            if (CreateUserAccount(login))
+                                UserMenu(_lib.FindUserAccount(login).ID);
+                            break;
+                        case 3:
+                            SearchMenu();
+                            break;
+                        case 4:
+                            ListAllBooks();
+                            break;
+                        case 5:
+                            ListAllSPs();
+                            break;
+                        case 6:
+                            startMenuWorking = false;
+                            break;
+                        default:
+                            PrintErrorMessage("Wrong choice input. No such option number exists. Should be integer 1 to 6");
+                            break;
+                    }
+                }
+                else
                 {
                     PrintErrorMessage("Wrong choice input.  Should be integer 1 to 6");
                 }
-                switch (choice)
-                {
-                    case 1:
-                        Console.Write("Enter account ID: ");
-                        correctInput = int.TryParse(Console.ReadLine(), out int userID);
-                        if (correctInput)
-                        {
-                            UserMenu(userID);
-                        }
-                        else
-                        {
-                            PrintErrorMessage("Wrong input of account ID");
-                        }
-                        break;
-                    case 2:
-                        Console.Write("Enter new login: ");
-                        string login = Console.ReadLine();
-                        if (CreateUserAccount(login))
-                            UserMenu(_lib.FindUserAccount(login).ID);
-                        break;
-                    case 3:
-                        SearchMenu();
-                        break;
-                    case 4:
-                        ListAllBooks();
-                        break;
-                    case 5:
-                        ListAllSPs();
-                        break;
-                    case 6:
-                        startMenuWorking = false;
-                        break;
-                    default:
-                        PrintErrorMessage("Wrong choice input. No such option number exists. Should be integer 1 to 6");
-                        break;
-                }
+                
             }
         }
         private static void UserMenu(int userID)
@@ -84,14 +87,15 @@ namespace Application
                     bool userMenuWorking = true;
                     while (userMenuWorking)
                     {
-                        Console.WriteLine("\n" + $"User: {user.Login} \t ID: {user.ID}");
+                        Console.ForegroundColor = ConsoleColor.DarkYellow;
+                        Console.WriteLine("\n" + "\t" + $"User: {user.Login} \t ID: {user.ID}");
                         Console.ForegroundColor = ConsoleColor.Blue;
                         Console.WriteLine(
                             "\t" + "Select an option:" + "\n" +
-                            "1. Take a publication" + "\t\t" + "5. List all taken publications" + "\n" +
-                            "2. Return a publication" + "\t\t" + "6. List all available books" + "\n" +
-                            "3. Search " + "\t" + "\t\t" + "7. List all available serial publications" + "\n" +
-                            "4. Delete account" + "\t\t" + "8. Exit" + "\n\n");
+                            "1. Take a publication"     + "\t\t" + "5. List all taken publications" + "\n" +
+                            "2. Return a publication"   + "\t\t" + "6. List all available books" + "\n" +
+                            "3. Search" + "\t"          + "\t\t" + "7. List all available serial publications" + "\n" +
+                            "4. Delete account"         + "\t\t" + "8. Exit account" + "\n");
                         Console.ForegroundColor = ConsoleColor.White;
                         Console.Write("Your choice: ");
                         bool correctChoiceInput = int.TryParse(Console.ReadLine(), out int choice);
@@ -113,14 +117,26 @@ namespace Application
                                         if (choicePubType == 1)
                                         {
                                             pubType = PublicationType.Book;
-                                            ListAllBooks();
-                                            Console.Write("Enter book's ID: ");
+                                            if (ListAllBooks())
+                                            {
+                                                Console.Write("\n" + "Enter book's ID: ");
+                                            }
+                                            else
+                                            {
+                                                break;
+                                            }
                                         }
                                         else if (choicePubType == 2)
                                         {
                                             pubType = PublicationType.SerialPublication;
-                                            ListAllSPs();
-                                            Console.Write("Enter SP's ID: ");
+                                            if (ListAllSPs())
+                                            {
+                                                Console.Write("\n" + "Enter SP's ID: ");
+                                            }
+                                            else
+                                            {
+                                                break;
+                                            }
                                         }
                                         else
                                         {
@@ -196,8 +212,8 @@ namespace Application
                                     SearchMenu();
                                     break;
                                 case 4:
-                                    DeleteUserAccount(userID);
-                                    userMenuWorking = false;
+                                    if (DeleteUserAccount(userID))
+                                        userMenuWorking = false;
                                     break;
                                 case 5:
                                     ListAllPubsTaken(userID);
@@ -252,7 +268,7 @@ namespace Application
                     case 1:
                         Console.Write("Enter publication title: ");
                         string title = Console.ReadLine();
-                        List < Publication > foundPubs= _lib.SearchPublications(title);
+                        List <Publication> foundPubs= _lib.SearchPublications(title);
                         if (foundPubs.Count == 0)
                         {
                             PrintErrorMessage("No publications found");
@@ -279,9 +295,9 @@ namespace Application
                                 ListPublications(foundPubs);
                             }
                         }
-                        else
+                        else if (!correctIDInput || pubID < 1)
                         {
-                            PrintErrorMessage("Wrong input of publication ID");
+                            PrintErrorMessage("Wrong input of publication ID. Should be integer greater than 0");
                         }
                         break;
                     case 3:

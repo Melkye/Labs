@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
+﻿using System.Collections.Generic;
+
 using LibraryBack.Publications;
 using LibraryBack.Library.Accounts;
 using LibraryBack.Library.Exceptions;
@@ -18,12 +17,15 @@ namespace LibraryBack.Library
         private const int MaxTakenPubs = 10;
         private const int MinLoginLength = 3;
         private const int MaxLoginLength = 30;
+
         private int _uniqueBooksCount = 0;
         private int _uniqueSerialPublicationsCount = 0;
         private int _uniqueUsersCount = 0;
+
         private List<Book> _bookList;
         private List<SerialPublication> _serialPublicationList;
         private List<UserAccount> _accountList;
+
         public Library(string name)
         {
             Name = name;
@@ -138,7 +140,7 @@ namespace LibraryBack.Library
         /// Thrown when user account with the desired ID doesn't exist in the library
         /// </exception>
         /// <exception cref="PublicationNotFoundException">
-        /// Thrown when user has no such publication taken as specified
+        /// Thrown when user has no publication as specified taken 
         /// </exception>
         public void ReturnPublication(int userID, PublicationType pubType, int pubID)
         {
@@ -168,7 +170,7 @@ namespace LibraryBack.Library
                 throw new InvalidIDException("Invalid user ID");
         }
         /// <exception cref="InvalidLoginException">
-        /// Thrown when specified login already exists in other account; when login is too short or too long
+        /// Thrown when specified login is too short or too long or already exists in other account; 
         /// </exception>
         public void CreateUserAccount(string login)
         {
