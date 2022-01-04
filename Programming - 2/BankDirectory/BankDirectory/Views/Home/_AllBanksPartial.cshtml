@@ -1,0 +1,52 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using BankDirectory.Areas.Identity.Data
+
+@inject SignInManager<BankDirectoryUser> SignInManager
+@inject UserManager<BankDirectoryUser> UserManager
+
+@model IEnumerable<BankDirectory.Models.Bank>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FoundationYear)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CEO)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NetIncome)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FoundationYear)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CEO)
+                </td>
+                <td>
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <text>₴@Html.DisplayFor(modelItem => item.NetIncome) млрд</text>
+                    }
+                    else
+                    {
+                        <text>Увійдіть в акаунт аби побачити</text>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
