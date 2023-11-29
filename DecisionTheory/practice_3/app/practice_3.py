@@ -65,23 +65,59 @@ def get_pareto_relation(alternatives_ratings_by_criteria):
     return pareto_relation
 
 
-def get_magoritar(alternatives_ratings_by_criteria):
+def get_majoritar_relation(alternatives_ratings_by_criteria):
     sigma_matrix = get_sigma_matrix(alternatives_ratings_by_criteria)
 
-    magoritar_relation = []
+    majoritar_relation = []
     for x in range(len(alternatives_ratings_by_criteria)):
-        magoritar_relation.append([])
+        majoritar_relation.append([])
 
         for y in range(len(alternatives_ratings_by_criteria)):
-            is_added = False
-
             sum_sigma = 0
             for i in range(len(sigma_matrix[x][y])):
                 sum_sigma += sigma_matrix[x][y][i]
 
             if sum_sigma > 0:
-                magoritar_relation[x].append(1)
+                majoritar_relation[x].append(1)
             else:
-                magoritar_relation[x].append(0)
+                majoritar_relation[x].append(0)
 
-    return magoritar_relation
+    return majoritar_relation
+
+
+def get_lexicographic_relation(alternatives_ratings_by_criteria, criteria_importance_desc):
+
+    alternatives_ratings_by_criteria_ordered_by_desc_importance = alternatives_ratings_by_criteria[
+        :]
+
+    for i in range(len(criteria_importance_desc)):
+        alternatives_ratings_by_criteria_ordered_by_desc_importance[
+            i] = alternatives_ratings_by_criteria[criteria_importance_desc[i]]
+
+    sigma_matrix_ordered_by_criteria_desc_importance = get_sigma_matrix(
+        alternatives_ratings_by_criteria_ordered_by_desc_importance)
+
+    lexicographic_relation = []
+
+    for x in range(len(alternatives_ratings_by_criteria)):
+        lexicographic_relation.append([])
+
+        for y in range(len(alternatives_ratings_by_criteria)):
+
+            is_added = False
+            for i in range(len(sigma_matrix_ordered_by_criteria_desc_importance[x][y])):
+
+                if sigma_matrix_ordered_by_criteria_desc_importance[x][y][i] > 0:
+                    lexicographic_relation[x].append(1)
+                    is_added = True
+                    break
+                elif sigma_matrix_ordered_by_criteria_desc_importance[x][y][i] == 0:
+                    pass
+                else:
+                    lexicographic_relation[x].append(0)
+                    is_added = True
+                    break
+            if is_added:
+                break
+
+    return lexicographic_relation
