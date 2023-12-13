@@ -89,15 +89,7 @@ def get_majoritar_relation(alternatives_ratings_by_criteria):
 
 def get_lexicographic_relation(alternatives_ratings_by_criteria, criteria_importance_desc):
 
-    alternatives_ratings_by_criteria_ordered_by_desc_importance = alternatives_ratings_by_criteria[
-        :]
-
-    for i in range(len(criteria_importance_desc)):
-        alternatives_ratings_by_criteria_ordered_by_desc_importance[
-            i] = alternatives_ratings_by_criteria[criteria_importance_desc[i]]
-
-    sigma_matrix_ordered_by_criteria_desc_importance = get_sigma_matrix(
-        alternatives_ratings_by_criteria_ordered_by_desc_importance)
+    sigma_matrix = get_sigma_matrix(alternatives_ratings_by_criteria)
 
     lexicographic_relation = []
 
@@ -107,12 +99,13 @@ def get_lexicographic_relation(alternatives_ratings_by_criteria, criteria_import
         for y in range(len(alternatives_ratings_by_criteria)):
 
             is_added = False
-            for i in range(len(sigma_matrix_ordered_by_criteria_desc_importance[x][y])):
-                if sigma_matrix_ordered_by_criteria_desc_importance[x][y][i] > 0:
+
+            for i in range(len(criteria_importance_desc)):
+                if sigma_matrix[x][y][criteria_importance_desc[i]] > 0:
                     lexicographic_relation[x].append(1)
                     is_added = True
                     break
-                elif sigma_matrix_ordered_by_criteria_desc_importance[x][y][i] == 0:
+                elif sigma_matrix[x][y][criteria_importance_desc[i]] == 0:
                     pass
                 else:
                     lexicographic_relation[x].append(0)
@@ -120,6 +113,39 @@ def get_lexicographic_relation(alternatives_ratings_by_criteria, criteria_import
                     break
             if not is_added:
                 lexicographic_relation[x].append(0)
+
+    # alternatives_ratings_by_criteria_ordered_by_desc_importance = alternatives_ratings_by_criteria[
+    #     :]
+
+    # for j in range(len(criteria_importance_desc)):
+    #     for i in range(len(alternatives_ratings_by_criteria_ordered_by_desc_importance)):
+    #         alternatives_ratings_by_criteria_ordered_by_desc_importance[i][
+    #             j] = alternatives_ratings_by_criteria[i][criteria_importance_desc[j]-1]
+
+    # sigma_matrix_ordered_by_criteria_desc_importance = get_sigma_matrix(
+    #     alternatives_ratings_by_criteria_ordered_by_desc_importance)
+
+    # lexicographic_relation = []
+
+    # for x in range(len(alternatives_ratings_by_criteria)):
+    #     lexicographic_relation.append([])
+
+    #     for y in range(len(alternatives_ratings_by_criteria)):
+
+    #         is_added = False
+    #         for i in range(len(sigma_matrix_ordered_by_criteria_desc_importance[x][y])):
+    #             if sigma_matrix_ordered_by_criteria_desc_importance[x][y][i] > 0:
+    #                 lexicographic_relation[x].append(1)
+    #                 is_added = True
+    #                 break
+    #             elif sigma_matrix_ordered_by_criteria_desc_importance[x][y][i] == 0:
+    #                 pass
+    #             else:
+    #                 lexicographic_relation[x].append(0)
+    #                 is_added = True
+    #                 break
+    #         if not is_added:
+    #             lexicographic_relation[x].append(0)
 
     return lexicographic_relation
 
@@ -157,6 +183,36 @@ def main():
     print_relation(lexicographic_relation)
 # ---
 
+# yulia's
+
+
+# alternatives_ratings_by_criteria = [
+#     [3, 1, 7, 2, 3, 9, 8, 5, 2, 8, 5, 7],
+#     [9, 1, 7, 5, 9, 9, 8, 5, 2, 8, 7, 7],
+#     [9, 5, 7, 7, 9, 9, 8, 5, 2, 8, 7, 7],
+#     [9, 9, 7, 7, 9, 9, 8, 5, 5, 8, 7, 7],
+#     [9, 9, 7, 8, 9, 9, 10, 8, 9, 10, 7, 7],
+#     [3, 4, 3, 2, 6, 3, 5, 6, 7, 9, 3, 7],
+#     [9, 9, 7, 8, 9, 9, 10, 8, 10, 10, 10, 7],
+#     [3, 9, 7, 8, 3, 2, 9, 1, 6, 9, 6, 5],
+#     [3, 1, 1, 1, 3, 2, 5, 1, 2, 8, 6, 5],
+#     [10, 5, 6, 1, 9, 9, 5, 8, 5, 8, 10, 7],
+
+#     [2, 3, 3, 1, 4, 2, 4, 5, 5, 2, 2, 4],
+#     [8, 9, 3, 3, 8, 7, 4, 5, 6, 9, 2, 4],
+#     [3, 1, 3, 3, 7, 5, 4, 5, 2, 5, 2, 4],
+#     [3, 1, 2, 3, 7, 5, 4, 3, 2, 1, 2, 4],
+#     [3, 1, 2, 2, 3, 5, 4, 3, 2, 1, 2, 4],
+#     [9, 7, 3, 2, 4, 5, 10, 3, 6, 3, 6, 5],
+#     [9, 9, 8, 8, 9, 9, 10, 8, 9, 10, 7, 7],
+#     [9, 9, 8, 8, 9, 9, 10, 8, 9, 10, 7, 7],
+#     [9, 9, 8, 8, 9, 9, 10, 8, 9, 10, 8, 7],
+#     [9, 9, 8, 8, 9, 9, 10, 10, 9, 10, 8, 7]
+# ]
+
+# criteria_importance_desc = [10, 2, 8, 9, 7, 4, 12, 3, 5, 1, 11, 6]
+
+# nastia's
 
 alternatives_ratings_by_criteria = [
     [8, 8, 10, 1, 3, 2, 1, 9, 4, 6, 5, 9],
@@ -182,6 +238,9 @@ alternatives_ratings_by_criteria = [
 ]
 
 criteria_importance_desc = [8, 10, 3, 0, 4, 5, 11, 2, 1, 7, 9, 6]
+
+
+# mine
 
 # alternatives_ratings_by_criteria = [
 #     [4, 6, 9,  4, 6,  5,  7, 10,  6,  8,  8,  9],
