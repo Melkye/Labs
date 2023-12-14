@@ -14,7 +14,22 @@
 #             sigma.append(-1)
 #         else:
 #             sigma.append(0)
-#     return sigma
+#     return
+
+def print_relation(relation):
+    for row in relation:
+        for element in row:
+            if isinstance(element, int) or isinstance(element, float):
+                print_to_file("{:.0f}".format(element) + "  ", end="")
+            else:
+                print_to_file(element + "  ", end="")
+        print_to_file()
+
+
+def print_to_file(data="", filename="Var-01-АдамовДенис.txt", end="\n"):
+    with open(filename, "a") as file:
+        file.write(str(data))
+        file.write(end)
 
 
 def get_sigma(x, y):
@@ -180,57 +195,48 @@ def get_berezosky_relation(alternatives_ratings_by_criteria, quasi_groups):
     n_matrix_prev = []
 
     for l in range(len(quasi_groups)):
-        current_criteria = quasi_groups[l]
-        quasi_system = []
+        criteria_group = quasi_groups[l]
+        alternatives_ratings_by_criteria_in_group = []
 
         for i in range(len(alternatives_ratings_by_criteria)):
-            quasi_system.append([])
+            alternatives_ratings_by_criteria_in_group.append([])
 
-            for j in range(len(current_criteria)):
-                quasi_system[i].append(
-                    alternatives_ratings_by_criteria[i][current_criteria[j]])
+            for j in range(len(criteria_group)):
+                alternatives_ratings_by_criteria_in_group[i].append(
+                    alternatives_ratings_by_criteria[i][criteria_group[j]])
 
-        # print(f"Ітерація {l+1}")
-        # print_array(quasi_system)
+        sigma_matrix = get_sigma_matrix(
+            alternatives_ratings_by_criteria_in_group)
 
-        sigma_matrix = get_sigma_matrix(quasi_system)
-
-        i_matrix = get_i_matrix_pareto(sigma_matrix)
-        # print(f"I0{l+1} таблиця")
-        # print_relation(i_matrix)
-
-        p_matrix = get_p_matrix_pareto(sigma_matrix)
-        # print(f"P0{l+1} таблиця")
-        # print_relation(p_matrix)
-
-        n_matrix = get_n_matrix_pareto(sigma_matrix)
-        # print(f"N0{l+1} таблиця")
-        # print_relation(n_matrix)
+        p_matrix_pareto = get_p_matrix_pareto(sigma_matrix)
+        i_matrix_pareto = get_i_matrix_pareto(sigma_matrix)
+        n_matrix_pareto = get_n_matrix_pareto(sigma_matrix)
 
         if l == 0:
-            i_matrix_prev = i_matrix
-            n_matrix_prev = n_matrix
-            p_matrix_prev = p_matrix
+            p_matrix_prev = p_matrix_pareto[:]
+            i_matrix_prev = i_matrix_pareto[:]
+            n_matrix_prev = n_matrix_pareto[:]
             continue
 
-        berezovsky_relation = []
+        berezovsky_relation_current = []
 
         for i in range(len(alternatives_ratings_by_criteria)):
-            berezovsky_relation.append([])
+            berezovsky_relation_current.append([])
 
             for j in range(len(alternatives_ratings_by_criteria)):
-                if p_matrix[i][j] == 1 and (p_matrix_prev[i][j] == 1 or n_matrix_prev[i][j] == 1 or i_matrix_prev[i][j] == 1):
-                    berezovsky_relation[i].append(1)
-                elif i_matrix[i][j] == 1 and p_matrix_prev[i][j] == 1:
-                    berezovsky_relation[i].append(1)
+                if p_matrix_pareto[i][j] == 1 and (p_matrix_prev[i][j] == 1 or n_matrix_prev[i][j] == 1 or i_matrix_prev[i][j] == 1):
+                    berezovsky_relation_current[i].append(1)
+                elif i_matrix_pareto[i][j] == 1 and p_matrix_prev[i][j] == 1:
+                    berezovsky_relation_current[i].append(1)
                 else:
-                    berezovsky_relation[i].append(0)
+                    berezovsky_relation_current[i].append(0)
 
         i_matrix = []
         for i in range(len(alternatives_ratings_by_criteria)):
             i_matrix.append([])
             for j in range(len(alternatives_ratings_by_criteria)):
-                if i_matrix[i][j] == 1 and i_matrix_prev[i][j] == 1:
+                if i_matrix_pareto[i][j] == 1 \
+                        and i_matrix_prev[i][j] == 1:
                     i_matrix[i].append(1)
                 else:
                     i_matrix[i].append(0)
@@ -239,7 +245,7 @@ def get_berezosky_relation(alternatives_ratings_by_criteria, quasi_groups):
         for i in range(len(alternatives_ratings_by_criteria)):
             n_matrix.append([])
             for j in range(len(alternatives_ratings_by_criteria)):
-                if not (berezovsky_relation[i][j] == 1 or berezovsky_relation[j][i] == 1 or i_matrix[i][j] == 1):
+                if not (berezovsky_relation_current[i][j] == 1 or berezovsky_relation_current[j][i] == 1 or i_matrix[i][j] == 1):
                     n_matrix[i].append(1)
                 else:
                     n_matrix[i].append(0)
@@ -255,25 +261,25 @@ def get_berezosky_relation(alternatives_ratings_by_criteria, quasi_groups):
 
         n_matrix_prev = n_matrix
         i_matrix_prev = i_matrix
-        p_matrix_prev = berezovsky_relation
+        p_matrix_prev = berezovsky_relation_current
 
-    return berezovsky_relation
-
-
-def print_relation(relation):
-    for row in relation:
-        for element in row:
-            if isinstance(element, int) or isinstance(element, float):
-                print_to_file("{:.0f}".format(element) + "  ", end="")
-            else:
-                print_to_file(element + "  ", end="")
-        print_to_file()
+    return berezovsky_relation_current
 
 
-def print_to_file(data="", end="\n"):
-    with open("Var-01-АдамовДенис.txt", "a") as file:
-        file.write(str(data))
-        file.write(end)
+def get_podynodsky_relation(alternatives_ratings_by_criteria):
+    def get_psi_matrix(alternatives_ratings_by_criteria):
+        result = []
+        for i in range(len(alternatives_ratings_by_criteria)):
+            result.append(
+                sorted(alternatives_ratings_by_criteria[i], reverse=True))
+        return result
+
+    psi_matrix = get_psi_matrix(alternatives_ratings_by_criteria)
+    # print("Вектор-функція")
+    # print_array(omega)
+
+    podynodsky_relation = get_pareto_relation(psi_matrix)
+    return podynodsky_relation
 
 
 def main():
@@ -284,9 +290,12 @@ def main():
         alternatives_ratings_by_criteria, criteria_importance_desc)
     berezosky_relation = get_berezosky_relation(
         alternatives_ratings_by_criteria, quasi_groups)
+    podynodsky_relation = get_podynodsky_relation(
+        alternatives_ratings_by_criteria)
 
     with open("Var-01-АдамовДенис.txt", "w") as file:
         file.truncate()
+
     print_to_file(1)
     print_relation(pareto_relation)
     print_to_file(2)
@@ -295,10 +304,11 @@ def main():
     print_relation(lexicographic_relation)
     print_to_file(4)
     print_relation(berezosky_relation)
+    print_to_file(5)
+    print_relation(podynodsky_relation)
 # ---
 
 # yulia's
-
 
 # alternatives_ratings_by_criteria = [
 #     [3, 1, 7, 2, 3, 9, 8, 5, 2, 8, 5, 7],
@@ -324,9 +334,11 @@ def main():
 #     [9, 9, 8, 8, 9, 9, 10, 10, 9, 10, 8, 7]
 # ]
 
-# criteria_importance_desc = [10, 2, 8, 9, 7, 4, 12, 3, 5, 1, 11, 6]
+# criteria_importance_desc = [9, 1, 7, 8, 6, 3, 11, 2, 4, 0, 10, 5]
+# quasi_groups = [[0, 4, 6, 10], [7, 8], [1, 2, 3, 5, 10, 11]]
 
 # nastia's
+
 
 alternatives_ratings_by_criteria = [
     [8, 8, 10, 1, 3, 2, 1, 9, 4, 6, 5, 9],
