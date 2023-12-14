@@ -114,40 +114,150 @@ def get_lexicographic_relation(alternatives_ratings_by_criteria, criteria_import
             if not is_added:
                 lexicographic_relation[x].append(0)
 
-    # alternatives_ratings_by_criteria_ordered_by_desc_importance = alternatives_ratings_by_criteria[
-    #     :]
-
-    # for j in range(len(criteria_importance_desc)):
-    #     for i in range(len(alternatives_ratings_by_criteria_ordered_by_desc_importance)):
-    #         alternatives_ratings_by_criteria_ordered_by_desc_importance[i][
-    #             j] = alternatives_ratings_by_criteria[i][criteria_importance_desc[j]-1]
-
-    # sigma_matrix_ordered_by_criteria_desc_importance = get_sigma_matrix(
-    #     alternatives_ratings_by_criteria_ordered_by_desc_importance)
-
-    # lexicographic_relation = []
-
-    # for x in range(len(alternatives_ratings_by_criteria)):
-    #     lexicographic_relation.append([])
-
-    #     for y in range(len(alternatives_ratings_by_criteria)):
-
-    #         is_added = False
-    #         for i in range(len(sigma_matrix_ordered_by_criteria_desc_importance[x][y])):
-    #             if sigma_matrix_ordered_by_criteria_desc_importance[x][y][i] > 0:
-    #                 lexicographic_relation[x].append(1)
-    #                 is_added = True
-    #                 break
-    #             elif sigma_matrix_ordered_by_criteria_desc_importance[x][y][i] == 0:
-    #                 pass
-    #             else:
-    #                 lexicographic_relation[x].append(0)
-    #                 is_added = True
-    #                 break
-    #         if not is_added:
-    #             lexicographic_relation[x].append(0)
-
     return lexicographic_relation
+
+
+def get_berezosky_relation(alternatives_ratings_by_criteria, quasi_groups):
+
+    def get_i_matrix_pareto(sigma_matrix):
+        i_matrix_pareto = []
+
+        for i in range(len(sigma_matrix)):
+            i_matrix_pareto.append([])
+
+            for j in range(len(sigma_matrix)):
+                sigma = sigma_matrix[i][j]
+                if all(sigma_k == 0 for sigma_k in sigma):
+                    i_matrix_pareto[i].append(1)
+                else:
+                    i_matrix_pareto[i].append(0)
+        return i_matrix_pareto
+
+    def get_p_matrix_pareto(sigma_matrix):
+        p_matrix_pareto = []
+
+        for i in range(len(sigma_matrix)):
+            p_matrix_pareto.append([])
+
+            for j in range(len(sigma_matrix)):
+                sigma = sigma_matrix[i][j]
+                is_greater = False
+                is_lower = False
+                for sigma_k in sigma:
+                    if sigma_k == 1:
+                        is_greater = True
+                    elif sigma_k == -1:
+                        is_lower = True
+                if is_greater and not is_lower:
+                    p_matrix_pareto[i].append(1)
+                else:
+                    p_matrix_pareto[i].append(0)
+        return p_matrix_pareto
+
+    def get_n_matrix_pareto(sigma_matrix):
+        n_matrix_pareto = []
+
+        for i in range(len(sigma_matrix)):
+            n_matrix_pareto.append([])
+
+            for j in range(len(sigma_matrix)):
+                sigma = sigma_matrix[i][j]
+                is_greater = False
+                is_lower = False
+                for sigma_k in sigma:
+                    if sigma_k == 1:
+                        is_greater = True
+                    elif sigma_k == -1:
+                        is_lower = True
+                if is_greater and is_lower:
+                    n_matrix_pareto[i].append(1)
+                else:
+                    n_matrix_pareto[i].append(0)
+        return n_matrix_pareto
+
+    p_matrix_prev = []
+    i_matrix_prev = []
+    n_matrix_prev = []
+
+    for l in range(len(quasi_groups)):
+        current_criteria = quasi_groups[l]
+        quasi_system = []
+
+        for i in range(len(alternatives_ratings_by_criteria)):
+            quasi_system.append([])
+
+            for j in range(len(current_criteria)):
+                quasi_system[i].append(
+                    alternatives_ratings_by_criteria[i][current_criteria[j]])
+
+        # print(f"Ітерація {l+1}")
+        # print_array(quasi_system)
+
+        sigma_matrix = get_sigma_matrix(quasi_system)
+
+        i_matrix = get_i_matrix_pareto(sigma_matrix)
+        # print(f"I0{l+1} таблиця")
+        # print_relation(i_matrix)
+
+        p_matrix = get_p_matrix_pareto(sigma_matrix)
+        # print(f"P0{l+1} таблиця")
+        # print_relation(p_matrix)
+
+        n_matrix = get_n_matrix_pareto(sigma_matrix)
+        # print(f"N0{l+1} таблиця")
+        # print_relation(n_matrix)
+
+        if l == 0:
+            i_matrix_prev = i_matrix
+            n_matrix_prev = n_matrix
+            p_matrix_prev = p_matrix
+            continue
+
+        berezovsky_relation = []
+
+        for i in range(len(alternatives_ratings_by_criteria)):
+            berezovsky_relation.append([])
+
+            for j in range(len(alternatives_ratings_by_criteria)):
+                if p_matrix[i][j] == 1 and (p_matrix_prev[i][j] == 1 or n_matrix_prev[i][j] == 1 or i_matrix_prev[i][j] == 1):
+                    berezovsky_relation[i].append(1)
+                elif i_matrix[i][j] == 1 and p_matrix_prev[i][j] == 1:
+                    berezovsky_relation[i].append(1)
+                else:
+                    berezovsky_relation[i].append(0)
+
+        i_matrix = []
+        for i in range(len(alternatives_ratings_by_criteria)):
+            i_matrix.append([])
+            for j in range(len(alternatives_ratings_by_criteria)):
+                if i_matrix[i][j] == 1 and i_matrix_prev[i][j] == 1:
+                    i_matrix[i].append(1)
+                else:
+                    i_matrix[i].append(0)
+
+        n_matrix = []
+        for i in range(len(alternatives_ratings_by_criteria)):
+            n_matrix.append([])
+            for j in range(len(alternatives_ratings_by_criteria)):
+                if not (berezovsky_relation[i][j] == 1 or berezovsky_relation[j][i] == 1 or i_matrix[i][j] == 1):
+                    n_matrix[i].append(1)
+                else:
+                    n_matrix[i].append(0)
+
+        # print(f"RB{l+1}")
+        # print_relation(berezovsky_relation)
+
+        # print(f"NB{l+1}")
+        # print_relation(n_matrix)
+
+        # print(f"IB{l+1}")
+        # print_relation(i_matrix)
+
+        n_matrix_prev = n_matrix
+        i_matrix_prev = i_matrix
+        p_matrix_prev = berezovsky_relation
+
+    return berezovsky_relation
 
 
 def print_relation(relation):
@@ -172,6 +282,8 @@ def main():
         alternatives_ratings_by_criteria)
     lexicographic_relation = get_lexicographic_relation(
         alternatives_ratings_by_criteria, criteria_importance_desc)
+    berezosky_relation = get_berezosky_relation(
+        alternatives_ratings_by_criteria, quasi_groups)
 
     with open("Var-01-АдамовДенис.txt", "w") as file:
         file.truncate()
@@ -181,6 +293,8 @@ def main():
     print_relation(majoritar_relation)
     print_to_file(3)
     print_relation(lexicographic_relation)
+    print_to_file(4)
+    print_relation(berezosky_relation)
 # ---
 
 # yulia's
@@ -238,6 +352,7 @@ alternatives_ratings_by_criteria = [
 ]
 
 criteria_importance_desc = [8, 10, 3, 0, 4, 5, 11, 2, 1, 7, 9, 6]
+quasi_groups = [[1, 3, 5, 8], [6, 7, 10], [0, 2, 4, 9, 11]]
 
 
 # mine
@@ -264,6 +379,6 @@ criteria_importance_desc = [8, 10, 3, 0, 4, 5, 11, 2, 1, 7, 9, 6]
 #     [6,  4,  4,  3,  3,  1, 1,  1,  3,  5,  3,  2],
 #     [6, 10,  8,  9,  3,  3,  1,  8,  3,  7,  9,  6]
 # ]
-# criteria_importance_desc = [6, 4, 10, 2, 11, 3, 8, 12, 1, 5, 9, 7]
-
+# criteria_importance_desc = [5, 3, 9, 1, 10, 2,, 7, 11, 0, 4, 8, 6]
+# quasi_groups = [[2, 7, 10], [3, 4, 11], [0, 1, 5, 6, 8, 9]]
 main()
