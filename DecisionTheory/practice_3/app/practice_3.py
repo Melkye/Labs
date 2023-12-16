@@ -232,15 +232,6 @@ def get_berezosky_relation(alternatives_ratings_by_criteria, quasi_groups):
                 else:
                     n_matrix[i].append(0)
 
-        # print(f"RB{l+1}")
-        # print_relation(berezovsky_relation)
-
-        # print(f"NB{l+1}")
-        # print_relation(n_matrix)
-
-        # print(f"IB{l+1}")
-        # print_relation(i_matrix)
-
         n_matrix_prev = n_matrix
         i_matrix_prev = i_matrix
         p_matrix_prev = berezovsky_relation_current

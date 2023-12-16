@@ -143,11 +143,11 @@ def solve_NM(relation):
         print_to_file()
 
     S_sets = get_S_sets()
-    print_sets(S_sets, "S")
+    # print_sets(S_sets, "S")
 
     Q_sets = get_Q_sets(S_sets)
     solution = Q_sets[-1]
-    print_sets(Q_sets, "Q")
+    # print_sets(Q_sets, "Q")
 
     int_stab = check_internal_stability(solution)
     ext_stab = check_external_stability(solution)
@@ -235,12 +235,12 @@ def solve_k_optimization(relation):
 
         return max_alts, opt_alts
 
-    print_to_file("PIN matrix:")
-    print_relation(get_PIN_matrix())
+    # print_to_file("PIN matrix:")
+    # print_relation(get_PIN_matrix())
 
     for i in range(1, 5):
         print_to_file(f"k{i}")
-        print_relation(get_H_matrix(i))
+        # print_relation(get_H_matrix(i))
         max_alts, opt_alts = get_max_and_opt(i)
         print_to_file(f"k{i} max elements: {max_alts}")
         print_to_file(f"k{i} opt elements: {opt_alts}")
@@ -248,13 +248,14 @@ def solve_k_optimization(relation):
 
 
 def main():
-    size = 15
-    count = 10
+    size = 20
+    count = 5
 
     with open("results.txt", "w") as file:
         file.truncate()
 
-    relations = read_relations("Варіант №1.txt", size, count)
+    relations = read_relations(
+        "../../practice_3/app/Var-01-АдамовДенис.txt", size, count)
 
     for (index, relation) in enumerate(relations):
 
