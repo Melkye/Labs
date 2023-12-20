@@ -118,8 +118,8 @@ def get_relation(alternatives_ratings_by_criteria,
     d_matrix = calc_discordance(
         alternatives_ratings_by_criteria, criteria_weights)
 
-    relation = [[0]*len(alternatives_ratings_by_criteria)] * \
-        len(alternatives_ratings_by_criteria)
+    relation = [[0] * len(alternatives_ratings_by_criteria)
+                for _ in range(len(alternatives_ratings_by_criteria))]
 
     for row in range(len(alternatives_ratings_by_criteria)):
         # TODO check if it is the right len()
