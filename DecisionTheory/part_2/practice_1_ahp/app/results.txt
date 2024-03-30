@@ -1,6 +1,6 @@
 
 Experts:
-Max characteristic number L_max: 4.004158
+Max characteristic number L_max: 4.004157
 CI: 0.001386
 CR: 0.001557
 Weights: [0.44859  0.081901 0.234755 0.234755]
@@ -10,9 +10,9 @@ Weights: [0.44859  0.081901 0.234755 0.234755]
 1st expert:
 
 Criteria:
-Max characteristic number L_max: 6.074526
-CI: 0.014905
-CR: 0.011924
+Max characteristic number L_max: 6.074521
+CI: 0.014904
+CR: 0.011923
 Weights: [0.396844 0.204544 0.044671 0.084408 0.064989 0.204544]
 
 ----------------------
@@ -45,10 +45,10 @@ Sequence x(m+1)/x(m):
 3.309524 7.424700 7.119974 7.097003 7.099513 7.099729 
 7.250000 6.841708 7.086169 7.103878 7.099863 7.099640 
 
-Max characteristic number L_max: 7.099692
-CI = (L_max-k)/(k-1): (7.099692-7 / 7-1) = 0.016615
+Max characteristic number L_max: 7.099693
+CI = (L_max-k)/(k-1): (7.099693-7 / 7-1) = 0.016616
 CIS: [0, 0, 0.52, 0.89, 1.11, 1.25, 1.35, 1.4, 1.45, 1.49]
-CR = CI/CIS: 0.016615/1.35 = 0.012308
+CR = CI/CIS: 0.016616/1.35 = 0.012308
 
 Weights calculation:
 Initial:
@@ -58,26 +58,26 @@ Geometric mean (weights):
 -----------------------
 
 Pair-wise comparisons of alternatives by criteria 2:
-Max characteristic number L_max: 7.073096
+Max characteristic number L_max: 7.073099
 CI: 0.012183
-CR: 0.009024
+CR: 0.009025
 Weights: [0.41001  0.037135 0.059052 0.229617 0.059052 0.146084 0.059052]
 
 Pair-wise comparisons of alternatives by criteria 3:
-Max characteristic number L_max: 7.040344
-CI: 0.006724
-CR: 0.004981
+Max characteristic number L_max: 7.040354
+CI: 0.006726
+CR: 0.004982
 Weights: [0.37724  0.04803  0.079212 0.04803  0.199729 0.04803  0.199729]
 
 Pair-wise comparisons of alternatives by criteria 4:
-Max characteristic number L_max: 7.216278
-CI: 0.036046
-CR: 0.026701
+Max characteristic number L_max: 7.216266
+CI: 0.036044
+CR: 0.0267
 Weights: [0.51806  0.044181 0.129342 0.075135 0.075135 0.103376 0.054771]
 
 Pair-wise comparisons of alternatives by criteria 5:
-Max characteristic number L_max: 7.157304
-CI: 0.026217
+Max characteristic number L_max: 7.157305
+CI: 0.026218
 CR: 0.01942
 Weights: [0.438318 0.069064 0.161601 0.046477 0.095406 0.069064 0.120069]
 
@@ -95,13 +95,13 @@ Weights for criteria of 1st expert:
 2nd expert:
 
 Criteria:
-Max characteristic number L_max: 6.070819
-CI: 0.014164
+Max characteristic number L_max: 6.070817
+CI: 0.014163
 CR: 0.011331
 Weights: [0.482733 0.04667  0.25562  0.071432 0.096876 0.04667 ]
 
 Criterion 1:
-Max characteristic number L_max: 7.048168
+Max characteristic number L_max: 7.048169
 CI: 0.008028
 CR: 0.005947
 Weights: [0.32868  0.167505 0.083752 0.167505 0.037928 0.047126 0.167505]
@@ -113,7 +113,7 @@ CR: 0.019028
 Weights: [0.496753 0.088083 0.088083 0.057985 0.088083 0.046668 0.134345]
 
 Criterion 3:
-Max characteristic number L_max: 7.024322
+Max characteristic number L_max: 7.024323
 CI: 0.004054
 CR: 0.003003
 Weights: [0.335696 0.172277 0.040645 0.066181 0.040645 0.172277 0.172277]
@@ -125,13 +125,13 @@ CR: 0.011121
 Weights: [0.440303 0.043248 0.117512 0.164794 0.073384 0.117512 0.043248]
 
 Criterion 5:
-Max characteristic number L_max: 7.030743
-CI: 0.005124
-CR: 0.003795
+Max characteristic number L_max: 7.030748
+CI: 0.005125
+CR: 0.003796
 Weights: [0.427974 0.045166 0.077038 0.077038 0.147873 0.147873 0.077038]
 
 Criterion 6:
-Max characteristic number L_max: 7.167394
+Max characteristic number L_max: 7.167395
 CI: 0.027899
 CR: 0.020666
 Weights: [0.471737 0.149259 0.043982 0.101374 0.073384 0.101374 0.058889]
@@ -144,13 +144,13 @@ Weights for criteria of 2nd expert:
 3rd expert:
 
 Criteria:
-Max characteristic number L_max: 6.018404
-CI: 0.003681
-CR: 0.002945
+Max characteristic number L_max: 6.018414
+CI: 0.003683
+CR: 0.002946
 Weights: [0.357762 0.063796 0.178881 0.041798 0.178881 0.178881]
 
 Criterion 1:
-Max characteristic number L_max: 7.008371
+Max characteristic number L_max: 7.008372
 CI: 0.001395
 CR: 0.001034
 Weights: [0.503301 0.055087 0.055087 0.104158 0.172194 0.055087 0.055087]
@@ -162,27 +162,27 @@ CR: -0.0
 Weights: [0.461538 0.076923 0.153846 0.076923 0.076923 0.076923 0.076923]
 
 Criterion 3:
-Max characteristic number L_max: 7.090193
+Max characteristic number L_max: 7.090194
 CI: 0.015032
 CR: 0.011135
 Weights: [0.410201 0.053022 0.139301 0.222671 0.084262 0.053022 0.037522]
 
 Criterion 4:
-Max characteristic number L_max: 7.151504
+Max characteristic number L_max: 7.151503
 CI: 0.025251
 CR: 0.018704
 Weights: [0.479983 0.095394 0.065432 0.095394 0.052662 0.168657 0.042479]
 
 Criterion 5:
-Max characteristic number L_max: 7.077841
+Max characteristic number L_max: 7.077842
 CI: 0.012974
 CR: 0.00961
 Weights: [0.34926  0.033288 0.085858 0.115556 0.046607 0.184716 0.184716]
 
 Criterion 6:
-Max characteristic number L_max: 7.124108
-CI: 0.020685
-CR: 0.015322
+Max characteristic number L_max: 7.124113
+CI: 0.020686
+CR: 0.015323
 Weights: [0.416321 0.096912 0.043485 0.096912 0.219291 0.06354  0.06354 ]
 
 Weights for criteria of 3rd expert: 
@@ -193,37 +193,37 @@ Weights for criteria of 3rd expert:
 4th expert:
 
 Criteria:
-Max characteristic number L_max: 6.121164
-CI: 0.024233
+Max characteristic number L_max: 6.12116
+CI: 0.024232
 CR: 0.019386
 Weights: [0.47154  0.252916 0.05694  0.073354 0.042697 0.102553]
 
 Criterion 1:
-Max characteristic number L_max: 7.088886
+Max characteristic number L_max: 7.088885
 CI: 0.014814
 CR: 0.010974
 Weights: [0.398813 0.060025 0.140135 0.03933  0.218246 0.10412  0.03933 ]
 
 Criterion 2:
-Max characteristic number L_max: 7.070206
-CI: 0.011701
-CR: 0.008667
+Max characteristic number L_max: 7.07021
+CI: 0.011702
+CR: 0.008668
 Weights: [0.389887 0.037724 0.132168 0.104056 0.064981 0.206203 0.064981]
 
 Criterion 3:
-Max characteristic number L_max: 7.068397
+Max characteristic number L_max: 7.068396
 CI: 0.011399
 CR: 0.008444
 Weights: [0.39713  0.105989 0.040037 0.213219 0.040037 0.134623 0.068965]
 
 Criterion 4:
-Max characteristic number L_max: 7.084764
-CI: 0.014127
+Max characteristic number L_max: 7.084768
+CI: 0.014128
 CR: 0.010465
 Weights: [0.424295 0.092935 0.092935 0.057206 0.235704 0.039718 0.057206]
 
 Criterion 5:
-Max characteristic number L_max: 7.128036
+Max characteristic number L_max: 7.128033
 CI: 0.021339
 CR: 0.015807
 Weights: [0.407327 0.0884   0.049284 0.049284 0.117885 0.070653 0.217167]
